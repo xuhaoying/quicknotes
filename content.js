@@ -85,7 +85,17 @@ function createNoteInput(x, y) {
     fontFamily: 'Arial, sans-serif',
     fontSize: '14px'
   });
-  textarea.placeholder = '添加笔记...';
+  textarea.placeholder = '添加笔记... (按Enter保存，Shift+Enter换行)';
+  
+  // 添加键盘事件监听，支持Enter保存和Shift+Enter换行
+  textarea.addEventListener('keydown', function(e) {
+    // 按Enter键保存（非Shift+Enter）
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault(); // 阻止默认行为
+      saveNote();
+    }
+    // Shift+Enter可以输入换行，不需要特殊处理
+  });
   
   // 将选中的文字自动填入笔记框，作为引用文本
   if (selectedText) {
