@@ -89,7 +89,7 @@ function createNoteInput(x, y) {
   
   // 将选中的文字自动填入笔记框，作为引用文本
   if (selectedText) {
-    textarea.value = '';
+    textarea.value = `"${selectedText}"\n\n`;
     // 将光标定位到文本末尾
     setTimeout(() => {
       textarea.selectionStart = textarea.selectionEnd = textarea.value.length;
@@ -178,13 +178,25 @@ function saveNote() {
   }
   
   // 获取原始文本内容
-  const rawText = textarea.value.trim();
+  let rawText = textarea.value.trim();
   console.log('原始笔记内容:', rawText);
   
   // 如果文本区域为空且没有选中文本，则不保存
   if (!rawText && !selectedText) {
     console.log('没有内容可保存，取消保存');
+    closeNoteInput();
     return;
+  }
+  
+  // 移除引用文本部分，避免重复保存
+  if (selectedText && rawText.startsWith(`"${selectedText}"`)) {
+    // 移除引用文本和后面最多两个换行符
+    rawText = rawText.substring(`"${selectedText}"`.length).trim();
+    if (rawText.startsWith('\n\n')) {
+      rawText = rawText.substring(2).trim();
+    } else if (rawText.startsWith('\n')) {
+      rawText = rawText.substring(1).trim();
+    }
   }
   
   // 准备笔记对象
@@ -399,12 +411,76 @@ function highlightSelectedText() {
   
   try {
     const range = selection.getRangeAt(0);
-    const span = document.createElement('span');
-    span.className = 'web-notes-highlight';
-    span.style.backgroundColor = '#ffeb3b';
-    span.style.cursor = 'pointer';
-    range.surroundContents(span);
-    selection.removeAllRanges(); // 清除选区
+    
+    // 更安全的高亮方法
+    try {
+      // 尝试简单的包裹方法
+      const span = document.createElement('span');
+      span.className = 'web-notes-highlight';
+      span.style.backgroundColor = '#ffeb3b';
+      span.style.cursor = 'pointer';
+      span.dataset.timestamp = new Date().toISOString(); // 添加时间戳用于识别
+      range.surroundContents(span);
+      selection.removeAllRanges(); // 清除选区
+    } catch (e) {
+      console.log('简单高亮失败，尝试复杂方法:', e);
+      
+      // 如果简单方法失败（通常是因为选择跨越多个元素），使用复杂方法
+      const highlightId = 'highlight-' + Date.now();
+      const highlightClass = 'web-notes-highlight';
+      
+      // 创建临时标记以标识范围起点和终点
+      const startMarker = document.createElement('span');
+      startMarker.id = 'start-' + highlightId;
+      const endMarker = document.createElement('span');
+      endMarker.id = 'end-' + highlightId;
+      
+      // 克隆范围以不影响原始选择
+      const tempRange = range.cloneRange();
+      
+      // 插入标记
+      tempRange.collapse(true);
+      tempRange.insertNode(startMarker);
+      tempRange.setEnd(range.endContainer, range.endOffset);
+      tempRange.collapse(false);
+      tempRange.insertNode(endMarker);
+      
+      // 获取包含这两个标记的所有节点
+      const walker = document.createTreeWalker(
+        document.body, 
+        NodeFilter.SHOW_TEXT, 
+        null, 
+        false
+      );
+      
+      // 寻找开始标记
+      let node;
+      let startFound = false;
+      let endFound = false;
+      
+      while (node = walker.nextNode()) {
+        // 检查节点是否在标记之间
+        const nodeRange = document.createRange();
+        nodeRange.selectNodeContents(node);
+        
+        const nodeBefore = nodeRange.compareBoundaryPoints(Range.START_TO_END, tempRange) <= 0;
+        const nodeAfter = nodeRange.compareBoundaryPoints(Range.END_TO_START, tempRange) >= 0;
+        
+        if (!nodeBefore && !nodeAfter) {
+          // 节点在范围内，高亮它
+          const span = document.createElement('span');
+          span.className = highlightClass;
+          span.style.backgroundColor = '#ffeb3b';
+          span.style.cursor = 'pointer';
+          node.parentNode.insertBefore(span, node);
+          span.appendChild(node);
+        }
+      }
+      
+      // 移除临时标记
+      if (startMarker.parentNode) startMarker.parentNode.removeChild(startMarker);
+      if (endMarker.parentNode) endMarker.parentNode.removeChild(endMarker);
+    }
   } catch (e) {
     console.error('Error highlighting text:', e);
   }
@@ -472,8 +548,15 @@ function tryGetNoteFromBackground(text, event) {
 
 // 显示笔记弹窗
 function showNotePopup(note, event) {
+  // 先移除已有的弹窗
+  const existingPopup = document.querySelector('.web-notes-popup');
+  if (existingPopup) {
+    existingPopup.remove();
+  }
+
   // 创建弹窗
   const popup = document.createElement('div');
+  popup.className = 'web-notes-popup';
   
   // 设置样式
   Object.assign(popup.style, {
@@ -494,11 +577,13 @@ function showNotePopup(note, event) {
   // 创建内容
   let html = '';
   
+  // 只显示高亮文本
   if (note.highlightedText) {
-    html += `<div style="color: #666; font-style: italic; margin-bottom: 8px;">"${note.highlightedText}"</div>`;
+    html += `<div style="color: #666; font-style: italic; margin-bottom: 8px; border-left: 3px solid #4CAF50; padding-left: 8px;">"${note.highlightedText}"</div>`;
   }
   
-  if (note.note) {
+  // 只有当用户笔记内容不为空时才显示
+  if (note.note && note.note.trim() !== '') {
     html += `<div style="margin-bottom: 8px;">${note.note}</div>`;
   }
   
@@ -507,10 +592,26 @@ function showNotePopup(note, event) {
   
   popup.innerHTML = html;
   
+  // 添加关闭按钮
+  const closeButton = document.createElement('button');
+  closeButton.textContent = '×';
+  Object.assign(closeButton.style, {
+    position: 'absolute',
+    top: '5px',
+    right: '5px',
+    backgroundColor: 'transparent',
+    border: 'none',
+    fontSize: '16px',
+    cursor: 'pointer',
+    color: '#999'
+  });
+  closeButton.onclick = () => popup.remove();
+  popup.appendChild(closeButton);
+  
   // 添加关闭事件
   document.addEventListener('click', function closePopup(e) {
     if (!popup.contains(e.target)) {
-      document.body.removeChild(popup);
+      popup.remove();
       document.removeEventListener('click', closePopup);
     }
   });

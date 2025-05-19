@@ -216,7 +216,7 @@ function createNoteElement(note, index) {
     html += `<div class="note-text highlight-text"><strong>引用文本：</strong>${note.highlightedText}</div>`;
   }
   
-  if (note.note) {
+  if (note.note && note.note.trim() !== '') {
     html += `<div class="note-text user-note"><strong>我的笔记：</strong>${note.note}</div>`;
   }
   
