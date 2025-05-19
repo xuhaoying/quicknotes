@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="128" height="128" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+  <!-- 笔记本背景 -->
+  <rect x="16" y="16" width="96" height="96" rx="8" fill="#4CAF50"/>
+  
+  <!-- 笔记本线条 -->
+  <line x1="32" y1="40" x2="96" y2="40" stroke="white" stroke-width="4"/>
+  <line x1="32" y1="56" x2="96" y2="56" stroke="white" stroke-width="4"/>
+  <line x1="32" y1="72" x2="96" y2="72" stroke="white" stroke-width="4"/>
+  <line x1="32" y1="88" x2="96" y2="88" stroke="white" stroke-width="4"/>
+  
+  <!-- 高亮笔 -->
+  <path d="M88 24 L112 48 L96 64 L72 40 Z" fill="#FFEB3B"/>
+  <path d="M72 40 L96 64 L88 72 L64 48 Z" fill="#FDD835"/>
+</svg> 
