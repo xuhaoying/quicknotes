@@ -12,6 +12,26 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   }
 });
 
+// 添加扩展安装和更新时的监听器
+chrome.runtime.onInstalled.addListener((details) => {
+  console.log('扩展已安装或更新:', details.reason);
+  
+  // 为特定网站添加额外权限
+  const specialSites = [
+    "https://ahrefs.com/*",
+    "https://*.ahrefs.com/*"
+  ];
+  
+  // 确保扩展在这些网站上有正确的权限
+  chrome.permissions.contains({ origins: specialSites }, (hasPermission) => {
+    if (!hasPermission) {
+      console.log('请求特定网站的额外权限');
+      // 这里仅记录，不主动请求权限，避免打扰用户
+      // 实际上content_scripts已经有权限通过manifest.json中的配置
+    }
+  });
+});
+
 // 保存笔记
 function saveNote(note, sendResponse) {
   console.log('后台开始保存笔记');

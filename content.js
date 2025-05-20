@@ -6,6 +6,15 @@ let isSelectionInProgress = false;
 // 只监听 mouseup 事件，简化逻辑
 document.addEventListener('mouseup', handleMouseUp);
 
+// 监听DOMContentLoaded事件，在页面加载完成后初始化
+document.addEventListener('DOMContentLoaded', initializeExtension);
+window.addEventListener('load', initializeExtension); // 双重保险，确保即使DOMContentLoaded已错过也能初始化
+
+// 初始化扩展功能
+function initializeExtension() {
+  console.log('WebNotes扩展初始化，域名:', window.location.hostname);
+}
+
 // 处理鼠标释放事件
 function handleMouseUp(e) {
   // 检查是否点击了输入框内部，如果是，不处理
@@ -13,10 +22,17 @@ function handleMouseUp(e) {
     return;
   }
   
-  // 增加延时，确保选择完成
+  // 记录当前域名，用于调试
+  const currentDomain = window.location.hostname;
+  console.log('当前网站域名:', currentDomain);
+  
+  // 增加延时，确保选择完成，复杂网站可能需要更长时间
   setTimeout(() => {
     const selection = window.getSelection();
     selectedText = selection.toString().trim();
+    
+    // 记录选中的文本
+    console.log('选中文本长度:', selectedText ? selectedText.length : 0);
     
     // 只在有足够长的选中文本时创建输入框
     if (selectedText && selectedText.length > 3) {
@@ -35,16 +51,31 @@ function handleMouseUp(e) {
       try {
         const range = selection.getRangeAt(0);
         const rect = range.getBoundingClientRect();
+        
+        // 记录选区位置信息
+        console.log('选区位置:', {
+          left: rect.left, 
+          top: rect.top, 
+          right: rect.right, 
+          bottom: rect.bottom,
+          width: rect.width,
+          height: rect.height
+        });
+        
+        // 确保笔记框在可见区域内
         const x = Math.max(5, rect.right + window.scrollX);
         const y = Math.max(5, rect.bottom + window.scrollY + 5); // 稍微偏下一点
+        
         createNoteInput(x, y);
       } catch (e) {
         console.error('Error getting selection position:', e);
+        
         // 如果获取位置失败，使用鼠标位置
+        console.log('使用鼠标位置:', e.pageX, e.pageY);
         createNoteInput(e.pageX, e.pageY);
       }
     }
-  }, 50); // 短延时，确保选择已完成
+  }, 200); // 增加延时，确保在复杂网站上选择已完成
 }
 
 // 创建笔记输入框
