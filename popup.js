@@ -97,7 +97,7 @@ function createNoteElement(note, index) {
     const urlLink = document.createElement('a');
     urlLink.className = 'note-url';
     urlLink.href = note.url;
-    urlLink.textContent = note.title || note.url;
+    urlLink.textContent = note.url;
     urlLink.target = '_blank';
     noteDiv.appendChild(urlLink);
     
@@ -174,6 +174,8 @@ function clearAllNotes() {
 // 显示导出菜单
 function showExportMenu() {
   try {
+    // 如果已存在导出菜单，则不再重复添加
+    if (document.querySelector('.export-menu')) return;
     const menu = document.createElement('div');
     menu.className = 'export-menu';
     menu.innerHTML = `
@@ -183,7 +185,6 @@ function showExportMenu() {
       <button class="export-option-btn" data-format="json">${chrome.i18n.getMessage('exportJson')}</button>
       <button class="export-cancel-btn">${chrome.i18n.getMessage('cancel')}</button>
     `;
-    
     // 添加事件监听器
     menu.querySelectorAll('.export-option-btn').forEach(btn => {
       btn.onclick = () => {
@@ -191,9 +192,7 @@ function showExportMenu() {
         menu.remove();
       };
     });
-    
     menu.querySelector('.export-cancel-btn').onclick = () => menu.remove();
-    
     document.body.appendChild(menu);
   } catch (error) {
     showError('Failed to show export menu');
@@ -226,7 +225,7 @@ function exportNotes(format) {
               if (note.note) {
                 text += `Note: ${note.note}\n`;
               }
-              text += `Source: ${note.title || note.url}\n`;
+              text += `Source: ${note.url}\n`;
               text += `Time: ${new Date(note.timestamp).toLocaleString()}\n`;
               text += '---\n';
               return text;
