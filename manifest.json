@@ -6,7 +6,8 @@
   "default_locale": "en",
   "permissions": [
     "storage",
-    "activeTab"
+    "activeTab",
+    "scripting"
   ],
   "action": {
     "default_popup": "popup.html",
@@ -21,14 +22,10 @@
     "48": "icons/icon48.png",
     "128": "icons/icon128.png"
   },
-  "content_scripts": [
-    {
-      "matches": ["<all_urls>"],
-      "js": ["content.js"],
-      "css": ["styles.css"],
-      "run_at": "document_idle"
-    }
-  ],
+  "web_accessible_resources": [{
+    "resources": ["styles.css"],
+    "matches": ["<all_urls>"]
+  }],
   "single_purpose": {
     "description": "This extension provides a simple way to save and manage notes from web pages. It allows users to highlight text, add notes, and export them in various formats. All data is stored locally."
   }

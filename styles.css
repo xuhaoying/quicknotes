@@ -1,19 +1,53 @@
 /* 基础样式 */
+:root {
+  --primary-color: #2196f3;
+  --primary-hover: #1976d2;
+  --error-color: #f44336;
+  --error-hover: #d32f2f;
+  --success-color: #4caf50;
+  --text-color: #222;
+  --text-secondary: #666;
+  --border-color: #e0e0e0;
+  --bg-color: #fafbfc;
+  --card-bg: #fff;
+  --shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* 深色模式变量 */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --primary-color: #64b5f6;
+    --primary-hover: #42a5f5;
+    --error-color: #ef5350;
+    --error-hover: #e53935;
+    --success-color: #66bb6a;
+    --text-color: #eee;
+    --text-secondary: #ccc;
+    --border-color: #404040;
+    --bg-color: #181c20;
+    --card-bg: #2d2d2d;
+    --shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  }
+}
+
+/* 基础样式 */
 body, .container {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-  background: #fafbfc;
-  color: #222;
+  background: var(--bg-color);
+  color: var(--text-color);
   margin: 0;
+  padding: 0;
 }
 
 /* 笔记输入框样式 */
 .note-input {
-  background: #fff;
-  border: 1px solid #e0e0e0;
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
   border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow);
   padding: 12px;
   width: 300px;
+  max-width: 90vw;
   position: absolute;
   z-index: 2147483647;
 }
@@ -24,19 +58,20 @@ body, .container {
   min-height: 100px;
   padding: 8px;
   margin-bottom: 12px;
-  border: 1px solid #e0e0e0;
+  border: 1px solid var(--border-color);
   border-radius: 4px;
   resize: vertical;
   font-size: 14px;
   line-height: 1.5;
-  background: #fafbfc;
-  color: #222;
+  background: var(--bg-color);
+  color: var(--text-color);
   outline: none;
-  transition: border-color 0.2s;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  box-sizing: border-box;
 }
 
 .note-textarea:focus {
-  border-color: #2196f3;
+  border-color: var(--primary-color);
   box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.1);
 }
 
@@ -54,27 +89,27 @@ body, .container {
   border-radius: 4px;
   font-size: 14px;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: background-color 0.2s, color 0.2s;
 }
 
 /* 保存按钮样式 */
 .save-button {
-  background-color: #2196f3;
+  background-color: var(--primary-color);
   color: white;
 }
 
 .save-button:hover {
-  background-color: #1976d2;
+  background-color: var(--primary-hover);
 }
 
 /* 取消按钮样式 */
 .cancel-button {
-  background-color: #f5f5f5;
-  color: #666;
+  background-color: var(--bg-color);
+  color: var(--text-secondary);
 }
 
 .cancel-button:hover {
-  background-color: #e0e0e0;
+  background-color: var(--border-color);
 }
 
 /* 通知样式 */
@@ -87,17 +122,24 @@ body, .container {
   font-size: 14px;
   z-index: 2147483647;
   animation: slideIn 0.3s ease-out;
+  max-width: 90vw;
 }
 
 /* 成功通知样式 */
 .note-notification.saved {
-  background-color: #4caf50;
+  background-color: var(--success-color);
   color: white;
 }
 
 /* 错误通知样式 */
 .note-notification.error {
-  background-color: #f44336;
+  background-color: var(--error-color);
+  color: white;
+}
+
+/* 保存中通知样式 */
+.note-notification.saving {
+  background-color: var(--primary-color);
   color: white;
 }
 
@@ -113,101 +155,333 @@ body, .container {
   }
 }
 
-/* 深色模式支持 */
-@media (prefers-color-scheme: dark) {
-  body, .container {
-    background: #181c20;
-    color: #eee;
-  }
-
-  .note-input {
-    background: #2d2d2d;
-    border-color: #404040;
-  }
-
-  .note-textarea {
-    background: #1e1e1e;
-    border-color: #404040;
-    color: #fff;
-  }
-
-  .note-textarea:focus {
-    border-color: #64b5f6;
-    box-shadow: 0 0 0 2px rgba(100, 181, 246, 0.1);
-  }
-
-  .cancel-button {
-    background-color: #404040;
-    color: #fff;
-  }
-
-  .cancel-button:hover {
-    background-color: #505050;
-  }
-}
-
-.note-input, .web-notes-popup {
+/* 弹出窗口样式 */
+.web-notes-popup {
+  min-width: 220px;
+  max-width: 90vw;
   border-radius: 10px;
-  background: #fff;
-  border: 1px solid #e3e5e8;
+  border: 1px solid var(--border-color);
+  background: var(--card-bg);
+  font-size: 15px;
   padding: 18px 20px 16px 20px;
-  min-width: 280px;
-  max-width: 96vw;
-  box-sizing: border-box;
-  box-shadow: none;
-  font-size: 15px;
+  box-shadow: var(--shadow);
 }
 
-.note-input textarea {
-  border: 1px solid #e3e5e8;
-  border-radius: 6px;
-  padding: 10px;
-  font-size: 15px;
-  width: 100%;
-  min-height: 80px;
-  margin-bottom: 12px;
-  background: #fafbfc;
-  color: #222;
-  resize: vertical;
-  box-sizing: border-box;
-  outline: none;
-  transition: border-color 0.2s;
-}
-.note-input textarea:focus {
-  border-color: #4f8cff;
-}
-
-.note-input button, .web-notes-popup button {
-  border: none;
-  border-radius: 6px;
-  background: #f5f6fa;
-  color: #222;
-  padding: 7px 18px;
-  font-size: 15px;
-  margin-left: 8px;
-  cursor: pointer;
-  transition: background 0.2s, color 0.2s;
-}
-.note-input button:hover, .web-notes-popup button:hover {
-  background: #e3e5e8;
-  color: #2563eb;
-}
-
-.note-input button:first-child {
-  background: #2563eb;
-  color: #fff;
-  margin-left: 0;
-}
-.note-input button:first-child:hover {
-  background: #1749b1;
-  color: #fff;
-}
-
+/* 高亮文本样式 */
 .web-notes-highlight {
   background: #f5e663;
   border-radius: 2px;
   padding: 0 2px;
   transition: background 0.2s;
+}
+
+/* 响应式设计 */
+@media (max-width: 480px) {
+  .note-input {
+    width: calc(100vw - 40px);
+    left: 20px !important;
+    right: 20px !important;
+  }
+  
+  .note-notification {
+    left: 20px;
+    right: 20px;
+    text-align: center;
+  }
+  
+  .note-buttons {
+    flex-direction: column;
+  }
+  
+  .note-button {
+    width: 100%;
+  }
+}
+
+/* 加载状态样式 */
+.loading {
+  text-align: center;
+  padding: 20px;
+  color: var(--text-secondary);
+}
+
+/* 错误消息样式 */
+.error-message {
+  text-align: center;
+  padding: 20px;
+  color: var(--error-color);
+  background: rgba(244, 67, 54, 0.1);
+  border-radius: 4px;
+  margin: 10px;
+}
+
+/* 笔记列表样式 */
+.notes-container {
+  max-height: 500px;
+  overflow-y: auto;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 12px;
+  margin: 16px 0;
+}
+
+.notes-count {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.no-notes {
+  color: var(--text-secondary);
+  font-style: italic;
+  text-align: center;
+  padding: 20px;
+}
+
+.note-item {
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 12px;
+  background: var(--card-bg);
+  position: relative;
+}
+
+.note-actions {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+}
+
+.delete-note-btn {
+  background-color: var(--error-color);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  line-height: 22px;
+  font-size: 14px;
+  cursor: pointer;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+
+.delete-note-btn:hover {
+  opacity: 1;
+}
+
+.note-text {
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.note-text.highlight-text {
+  color: var(--text-secondary);
+  font-style: italic;
+  background: var(--bg-color);
+  padding: 8px;
+  border-left: 3px solid #ffeb3b;
+  border-radius: 0 4px 4px 0;
+}
+
+.note-text.user-note {
+  color: var(--text-color);
+}
+
+.note-divider {
+  height: 1px;
+  background-color: var(--border-color);
+  margin: 10px 0;
+}
+
+.note-url {
+  color: var(--primary-color);
+  text-decoration: none;
+  font-size: 12px;
+  display: block;
+  margin-top: 8px;
+}
+
+.note-url:hover {
+  text-decoration: underline;
+}
+
+.note-meta {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-top: 8px;
+}
+
+/* 导出菜单样式 */
+.export-menu {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: var(--shadow);
+  z-index: 2147483647;
+  min-width: 200px;
+}
+
+.export-menu h3 {
+  margin: 0 0 16px 0;
+  color: var(--text-color);
+  font-size: 16px;
+}
+
+.export-option-btn {
+  display: block;
+  width: 100%;
+  padding: 8px 16px;
+  margin-bottom: 8px;
+  background: var(--bg-color);
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.export-option-btn:hover {
+  background: var(--border-color);
+}
+
+.export-cancel-btn {
+  display: block;
+  width: 100%;
+  padding: 8px 16px;
+  background: var(--error-color);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.export-cancel-btn:hover {
+  background: var(--error-hover);
+}
+
+/* 通知样式 */
+#web-notes-saving-notification {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: #fff;
+  color: #2563eb;
+  border: 1px solid #e3e5e8;
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-size: 15px;
+  z-index: 2147483647;
+  box-shadow: none;
+}
+
+/* 暗色模式 */
+@media (prefers-color-scheme: dark) {
+  body, .container {
+    background: #181c20;
+    color: #eee;
+  }
+  .note-input, .web-notes-popup {
+    background: #23272f;
+    color: #eee;
+    border: 1px solid #333a45;
+  }
+  .note-input textarea {
+    background: #23272f;
+    color: #eee;
+    border-color: #333a45;
+  }
+  .note-input textarea:focus {
+    border-color: #4f8cff;
+  }
+  .web-notes-highlight {
+    background: #ffe06655;
+  }
+  .web-notes-popup {
+    background: #23272f;
+    color: #eee;
+    border: 1px solid #333a45;
+  }
+  .web-notes-popup button {
+    color: #888;
+  }
+  .web-notes-popup button:hover {
+    background: #23272f;
+    color: #4f8cff;
+  }
+  #web-notes-saving-notification {
+    background: #23272f;
+    color: #4f8cff;
+    border: 1px solid #333a45;
+  }
+  .note-meta {
+    color: #888;
+  }
+}
+
+/* Popup styles */
+.container {
+  width: 400px;
+  padding: 16px;
+}
+
+h1 {
+  font-size: 20px;
+  margin-bottom: 16px;
+  color: #333;
+}
+
+.button-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 16px;
+  gap: 8px;
+}
+
+.clear-all-btn {
+  background-color: #f44336;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.clear-all-btn:hover {
+  background-color: #d32f2f;
+}
+
+.export-btn {
+  background-color: #2196F3;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.export-btn:hover {
+  background-color: #0b7dda;
+}
+
+.web-notes-highlight {
+  background-color: #ffeb3b;
+  cursor: pointer;
+}
+
+.web-notes-highlight:hover {
+  background-color: #fdd835;
 }
 
 .web-notes-popup {
@@ -297,330 +571,5 @@ body, .container {
   }
   .note-meta {
     color: #888;
-  }
-}
-
-/* Popup styles */
-.container {
-  width: 400px;
-  padding: 16px;
-}
-
-h1 {
-  font-size: 20px;
-  margin-bottom: 16px;
-  color: #333;
-}
-
-.button-container {
-  display: flex;
-  justify-content: flex-end;
-  margin-bottom: 16px;
-  gap: 8px;
-}
-
-.notes-container {
-  max-height: 500px;
-  overflow-y: auto;
-}
-
-.notes-count {
-  font-size: 14px;
-  color: #666;
-  margin-bottom: 10px;
-  padding-bottom: 5px;
-  border-bottom: 1px solid #eee;
-}
-
-.no-notes {
-  color: #888;
-  font-style: italic;
-  text-align: center;
-  padding: 20px;
-}
-
-.note-item {
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  padding: 12px;
-  margin-bottom: 12px;
-  background-color: #fff;
-  position: relative;
-}
-
-.note-actions {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-}
-
-.delete-note-btn {
-  background-color: #f44336;
-  color: white;
-  border: none;
-  border-radius: 50%;
-  width: 20px;
-  height: 20px;
-  line-height: 18px;
-  font-size: 14px;
-  cursor: pointer;
-  opacity: 0.7;
-}
-
-.delete-note-btn:hover {
-  opacity: 1;
-}
-
-.clear-all-btn {
-  background-color: #f44336;
-  color: white;
-  border: none;
-  padding: 6px 12px;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 12px;
-}
-
-.clear-all-btn:hover {
-  background-color: #d32f2f;
-}
-
-.export-btn {
-  background-color: #2196F3;
-  color: white;
-  border: none;
-  padding: 6px 12px;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 12px;
-}
-
-.export-btn:hover {
-  background-color: #0b7dda;
-}
-
-.export-menu {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: white;
-  border-radius: 4px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-  padding: 16px;
-  width: 250px;
-  z-index: 1000;
-  text-align: center;
-}
-
-.export-menu h3 {
-  margin-top: 0;
-  margin-bottom: 16px;
-  font-size: 16px;
-  color: #333;
-}
-
-.export-option-btn {
-  display: block;
-  width: 100%;
-  margin-bottom: 8px;
-  padding: 8px;
-  background-color: #4CAF50;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.export-option-btn:hover {
-  background-color: #45a049;
-}
-
-.export-cancel-btn {
-  display: block;
-  width: 100%;
-  margin-top: 8px;
-  padding: 8px;
-  background-color: #f5f5f5;
-  color: #333;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.export-cancel-btn:hover {
-  background-color: #e0e0e0;
-}
-
-.note-text {
-  margin-bottom: 8px;
-  line-height: 1.4;
-}
-
-.note-text.highlight-text {
-  color: #666;
-  font-style: italic;
-  background-color: #f9f9f9;
-  padding: 8px;
-  border-left: 3px solid #ffeb3b;
-}
-
-.note-text.user-note {
-  color: #333;
-}
-
-.note-divider {
-  height: 1px;
-  background-color: #ddd;
-  margin: 10px 0;
-}
-
-.note-url {
-  color: #0066cc;
-  text-decoration: none;
-}
-
-.note-url:hover {
-  text-decoration: underline;
-}
-
-/* Highlight styles */
-.web-notes-highlight {
-  background-color: #ffeb3b;
-  cursor: pointer;
-}
-
-.web-notes-highlight:hover {
-  background-color: #fdd835;
-}
-
-/* 笔记输入框样式 */
-.note-input {
-  background: #fff;
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  padding: 12px;
-  width: 300px;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-}
-
-/* 文本区域样式 */
-.note-textarea {
-  width: 100%;
-  min-height: 100px;
-  padding: 8px;
-  margin-bottom: 12px;
-  border: 1px solid #e0e0e0;
-  border-radius: 4px;
-  resize: vertical;
-  font-size: 14px;
-  line-height: 1.5;
-}
-
-.note-textarea:focus {
-  outline: none;
-  border-color: #2196f3;
-  box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.1);
-}
-
-/* 按钮组样式 */
-.note-buttons {
-  display: flex;
-  justify-content: flex-end;
-  gap: 8px;
-}
-
-/* 按钮基础样式 */
-.note-button {
-  padding: 6px 12px;
-  border: none;
-  border-radius: 4px;
-  font-size: 14px;
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
-
-/* 保存按钮样式 */
-.save-button {
-  background-color: #2196f3;
-  color: white;
-}
-
-.save-button:hover {
-  background-color: #1976d2;
-}
-
-/* 取消按钮样式 */
-.cancel-button {
-  background-color: #f5f5f5;
-  color: #666;
-}
-
-.cancel-button:hover {
-  background-color: #e0e0e0;
-}
-
-/* 通知样式 */
-.note-notification {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  padding: 12px 20px;
-  border-radius: 4px;
-  font-size: 14px;
-  z-index: 2147483647;
-  animation: slideIn 0.3s ease-out;
-}
-
-/* 成功通知样式 */
-.note-notification.saved {
-  background-color: #4caf50;
-  color: white;
-}
-
-/* 错误通知样式 */
-.note-notification.error {
-  background-color: #f44336;
-  color: white;
-}
-
-/* 动画 */
-@keyframes slideIn {
-  from {
-    transform: translateX(100%);
-    opacity: 0;
-  }
-  to {
-    transform: translateX(0);
-    opacity: 1;
-  }
-}
-
-/* 深色模式支持 */
-@media (prefers-color-scheme: dark) {
-  .note-input {
-    background: #2d2d2d;
-    border-color: #404040;
-  }
-
-  .note-textarea {
-    background: #1e1e1e;
-    border-color: #404040;
-    color: #fff;
-  }
-
-  .note-textarea:focus {
-    border-color: #64b5f6;
-    box-shadow: 0 0 0 2px rgba(100, 181, 246, 0.1);
-  }
-
-  .cancel-button {
-    background-color: #404040;
-    color: #fff;
-  }
-
-  .cancel-button:hover {
-    background-color: #505050;
   }
 } 

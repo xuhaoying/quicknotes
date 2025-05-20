@@ -1,9 +1,6 @@
 // 监听来自内容脚本的消息
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  console.log('后台接收到消息:', request.action);
-  
   if (request.action === 'saveNote') {
-    console.log('准备保存笔记:', request.note);
     saveNote(request.note, sendResponse);
     return true; // 保持消息通道开放，以便异步响应
   } else if (request.action === 'getNote') {
@@ -34,12 +31,10 @@ chrome.runtime.onInstalled.addListener((details) => {
 
 // 保存笔记
 function saveNote(note, sendResponse) {
-  console.log('后台开始保存笔记');
   chrome.storage.local.get(['notes'], function(result) {
     try {
       // 检查笔记格式是否正确
       if (!note) {
-        console.error('笔记对象为null或undefined');
         sendResponse({ success: false, error: '笔记格式错误: 对象为空' });
         return;
       }
@@ -61,17 +56,13 @@ function saveNote(note, sendResponse) {
       
       // 保存到 Chrome 存储
       chrome.storage.local.set({ notes: notes }, function() {
-        console.log('笔记已保存到存储:', validNote);
-        // 检查是否有错误
         if (chrome.runtime.lastError) {
-          console.error('保存到存储时出错:', chrome.runtime.lastError);
           sendResponse({ success: false, error: chrome.runtime.lastError.message });
         } else {
           sendResponse({ success: true });
         }
       });
     } catch (e) {
-      console.error('保存笔记处理过程中出错:', e);
       sendResponse({ success: false, error: e.message });
     }
   });
@@ -85,8 +76,22 @@ function getNote(url, text, sendResponse) {
       const note = notes.find(n => n.url === url && n.highlightedText === text);
       sendResponse({ note: note });
     } catch (e) {
-      console.error('获取笔记时出错:', e);
       sendResponse({ error: e.message });
     }
   });
-} 
+}
+
+// 监听扩展图标点击事件
+chrome.action.onClicked.addListener((tab) => {
+  // 注入 content script
+  chrome.scripting.executeScript({
+    target: { tabId: tab.id },
+    files: ['content.js']
+  });
+  
+  // 注入样式
+  chrome.scripting.insertCSS({
+    target: { tabId: tab.id },
+    files: ['styles.css']
+  });
+}); 

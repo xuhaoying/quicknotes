@@ -15,13 +15,17 @@
 
     h1 {
       color: #2196f3;
-      border-bottom: 2px solid #e0e0e0;
+      border-bottom: 2px solid #2196f3;
       padding-bottom: 10px;
     }
 
     h2 {
       color: #1976d2;
       margin-top: 30px;
+    }
+
+    .section {
+      margin: 20px 0;
     }
 
     p {
@@ -41,11 +45,11 @@
 
       h1 {
         color: #64b5f6;
-        border-bottom-color: #404040;
+        border-bottom-color: #64b5f6;
       }
 
       h2 {
-        color: #90caf9;
+        color: #42a5f5;
       }
 
       .last-updated {
@@ -59,25 +63,42 @@
   
   <p class="last-updated">Last updated: March 2024</p>
 
-  <h2>Overview</h2>
-  <p>QuickNote Web Clipper is committed to protecting your privacy. This extension operates entirely locally on your device and does not collect, store, or transmit any personal data to external servers.</p>
+  <div class="section">
+    <h2>Data Collection</h2>
+    <p>QuickNote Web Clipper does not collect or transmit any personal data. All notes and data are stored locally on your device using Chrome's storage API.</p>
+  </div>
 
-  <h2>Data Collection</h2>
-  <p>This extension does not collect any personal information. All notes and data are stored locally on your device using Chrome's storage API. We do not have access to your data, and no data is sent to any external servers.</p>
+  <div class="section">
+    <h2>Permissions Used</h2>
+    <p>The extension requires the following permissions to function:</p>
+    <ul>
+      <li><strong>storage</strong>: Used to save your notes locally on your device.</li>
+      <li><strong>activeTab</strong>: Used to access the current tab when you select text to create a note.</li>
+      <li><strong>scripting</strong>: Used to dynamically inject the note-taking interface and styles into web pages. This permission is essential for the following reasons:
+        <ul>
+          <li>To create the floating note input interface when you select text</li>
+          <li>To apply custom styles to the note interface without affecting the webpage's original styling</li>
+          <li>To ensure the note interface appears correctly on all websites</li>
+          <li>To maintain a consistent user experience across different web pages</li>
+        </ul>
+        The extension only uses this permission when you actively interact with it (clicking the extension icon or selecting text), and it never runs scripts in the background or without your explicit action.
+      </li>
+    </ul>
+  </div>
 
-  <h2>Permissions Used</h2>
-  <ul>
-    <li><strong>storage</strong>: Used to store your notes locally on your device.</li>
-    <li><strong>activeTab</strong>: Used to access the current tab's content only when you select text to create a note.</li>
-  </ul>
+  <div class="section">
+    <h2>Data Storage</h2>
+    <p>All notes are stored locally on your device using Chrome's storage API. The extension does not have access to any external servers or cloud storage.</p>
+  </div>
 
-  <h2>Data Storage</h2>
-  <p>All notes are stored locally in your browser using Chrome's storage API. The data is only accessible on your device and is not synchronized with any external servers.</p>
+  <div class="section">
+    <h2>Data Sharing</h2>
+    <p>The extension does not share any data with third parties. All data remains on your device and is only accessible to you.</p>
+  </div>
 
-  <h2>Data Sharing</h2>
-  <p>This extension does not share any data with third parties. All data remains on your device and is only accessible to you.</p>
-
-  <h2>Contact</h2>
-  <p>If you have any questions about this privacy policy, please contact us through the Chrome Web Store.</p>
+  <div class="section">
+    <h2>Contact</h2>
+    <p>If you have any questions about this privacy policy, please contact us at lingwind8@outlook.com.</p>
+  </div>
 </body>
 </html> 
