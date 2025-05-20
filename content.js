@@ -216,37 +216,44 @@ function saveNoteLocally(note) {
     // 先显示保存中提示
     showSavingNotification();
     
-    // 尝试通过消息发送到后台
-    chrome.runtime.sendMessage({
-      action: 'saveNote',
-      note: note
-    }, function(response) {
-      // 检查是否发生了错误
-      if (chrome.runtime.lastError) {
-        console.error('消息发送错误:', chrome.runtime.lastError);
-        // 如果是上下文失效错误，尝试直接保存
-        directlySaveNote(note);
-        return;
-      }
-      
-      console.log('保存笔记响应:', response);
-      
-      if (response && response.success) {
-        console.log('笔记保存成功');
-        // 尝试高亮选中的文本
-        tryHighlightText();
-        // 显示保存成功提示
-        showSavedNotification();
-      } else {
-        console.error('通过后台保存失败，尝试直接保存:', response ? response.error : '未知错误');
-        // 尝试直接保存
-        directlySaveNote(note);
-        return;
-      }
-      
-      // 关闭笔记输入框
-      closeNoteInput();
-    });
+    // 检查 chrome.runtime 是否可用
+    if (typeof chrome !== 'undefined' && chrome.runtime) {
+      // 尝试通过消息发送到后台
+      chrome.runtime.sendMessage({
+        action: 'saveNote',
+        note: note
+      }, function(response) {
+        // 检查是否发生了错误
+        if (chrome.runtime.lastError) {
+          console.error('消息发送错误:', chrome.runtime.lastError);
+          // 如果是上下文失效错误，尝试直接保存
+          directlySaveNote(note);
+          return;
+        }
+        
+        console.log('保存笔记响应:', response);
+        
+        if (response && response.success) {
+          console.log('笔记保存成功');
+          // 尝试高亮选中的文本
+          tryHighlightText();
+          // 显示保存成功提示
+          showSavedNotification();
+        } else {
+          console.error('通过后台保存失败，尝试直接保存:', response ? response.error : '未知错误');
+          // 尝试直接保存
+          directlySaveNote(note);
+          return;
+        }
+        
+        // 关闭笔记输入框
+        closeNoteInput();
+      });
+    } else {
+      // 如果 chrome.runtime 不可用，直接保存
+      console.log('chrome.runtime 不可用，使用直接保存方式');
+      directlySaveNote(note);
+    }
   } catch (error) {
     console.error('保存过程中发生错误:', error);
     // 尝试直接保存
