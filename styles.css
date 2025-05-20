@@ -1,8 +1,149 @@
+/* 基础样式 */
 body, .container {
-  font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   background: #fafbfc;
   color: #222;
   margin: 0;
+}
+
+/* 笔记输入框样式 */
+.note-input {
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 12px;
+  width: 300px;
+  position: absolute;
+  z-index: 2147483647;
+}
+
+/* 文本区域样式 */
+.note-textarea {
+  width: 100%;
+  min-height: 100px;
+  padding: 8px;
+  margin-bottom: 12px;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  resize: vertical;
+  font-size: 14px;
+  line-height: 1.5;
+  background: #fafbfc;
+  color: #222;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.note-textarea:focus {
+  border-color: #2196f3;
+  box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.1);
+}
+
+/* 按钮组样式 */
+.note-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+/* 按钮基础样式 */
+.note-button {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+/* 保存按钮样式 */
+.save-button {
+  background-color: #2196f3;
+  color: white;
+}
+
+.save-button:hover {
+  background-color: #1976d2;
+}
+
+/* 取消按钮样式 */
+.cancel-button {
+  background-color: #f5f5f5;
+  color: #666;
+}
+
+.cancel-button:hover {
+  background-color: #e0e0e0;
+}
+
+/* 通知样式 */
+.note-notification {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  padding: 12px 20px;
+  border-radius: 4px;
+  font-size: 14px;
+  z-index: 2147483647;
+  animation: slideIn 0.3s ease-out;
+}
+
+/* 成功通知样式 */
+.note-notification.saved {
+  background-color: #4caf50;
+  color: white;
+}
+
+/* 错误通知样式 */
+.note-notification.error {
+  background-color: #f44336;
+  color: white;
+}
+
+/* 动画 */
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* 深色模式支持 */
+@media (prefers-color-scheme: dark) {
+  body, .container {
+    background: #181c20;
+    color: #eee;
+  }
+
+  .note-input {
+    background: #2d2d2d;
+    border-color: #404040;
+  }
+
+  .note-textarea {
+    background: #1e1e1e;
+    border-color: #404040;
+    color: #fff;
+  }
+
+  .note-textarea:focus {
+    border-color: #64b5f6;
+    box-shadow: 0 0 0 2px rgba(100, 181, 246, 0.1);
+  }
+
+  .cancel-button {
+    background-color: #404040;
+    color: #fff;
+  }
+
+  .cancel-button:hover {
+    background-color: #505050;
+  }
 }
 
 .note-input, .web-notes-popup {
@@ -353,44 +494,133 @@ h1 {
   background-color: #fdd835;
 }
 
-/* Note input styles */
+/* 笔记输入框样式 */
 .note-input {
-  position: fixed;
-  background: white;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   padding: 12px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  z-index: 10000;
+  width: 300px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
-.note-input textarea {
+/* 文本区域样式 */
+.note-textarea {
   width: 100%;
-  min-height: 80px;
-  margin-bottom: 8px;
+  min-height: 100px;
   padding: 8px;
-  border: 1px solid #ddd;
+  margin-bottom: 12px;
+  border: 1px solid #e0e0e0;
   border-radius: 4px;
   resize: vertical;
+  font-size: 14px;
+  line-height: 1.5;
 }
 
-.note-input button {
-  background-color: #4CAF50;
-  color: white;
+.note-textarea:focus {
+  outline: none;
+  border-color: #2196f3;
+  box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.1);
+}
+
+/* 按钮组样式 */
+.note-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+/* 按钮基础样式 */
+.note-button {
+  padding: 6px 12px;
   border: none;
-  padding: 8px 16px;
   border-radius: 4px;
+  font-size: 14px;
   cursor: pointer;
+  transition: background-color 0.2s;
 }
 
-.note-input button:hover {
-  background-color: #45a049;
+/* 保存按钮样式 */
+.save-button {
+  background-color: #2196f3;
+  color: white;
 }
 
-.note-input button.cancel-btn {
+.save-button:hover {
+  background-color: #1976d2;
+}
+
+/* 取消按钮样式 */
+.cancel-button {
+  background-color: #f5f5f5;
+  color: #666;
+}
+
+.cancel-button:hover {
+  background-color: #e0e0e0;
+}
+
+/* 通知样式 */
+.note-notification {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  padding: 12px 20px;
+  border-radius: 4px;
+  font-size: 14px;
+  z-index: 2147483647;
+  animation: slideIn 0.3s ease-out;
+}
+
+/* 成功通知样式 */
+.note-notification.saved {
+  background-color: #4caf50;
+  color: white;
+}
+
+/* 错误通知样式 */
+.note-notification.error {
   background-color: #f44336;
+  color: white;
 }
 
-.note-input button.cancel-btn:hover {
-  background-color: #d32f2f;
+/* 动画 */
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* 深色模式支持 */
+@media (prefers-color-scheme: dark) {
+  .note-input {
+    background: #2d2d2d;
+    border-color: #404040;
+  }
+
+  .note-textarea {
+    background: #1e1e1e;
+    border-color: #404040;
+    color: #fff;
+  }
+
+  .note-textarea:focus {
+    border-color: #64b5f6;
+    box-shadow: 0 0 0 2px rgba(100, 181, 246, 0.1);
+  }
+
+  .cancel-button {
+    background-color: #404040;
+    color: #fff;
+  }
+
+  .cancel-button:hover {
+    background-color: #505050;
+  }
 } 

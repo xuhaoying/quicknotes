@@ -1,21 +1,77 @@
 {
-  "extName": {"message": "QuickNote Web Clipper"},
-  "extDesc": {"message": "Quickly clip and save notes from any web page with one click. Highlight, annotate, and export your research."},
-  "saveNote": {"message": "Save Note"},
-  "cancel": {"message": "Cancel"},
-  "addNotePlaceholder": {"message": "Add a note... (Enter to save, Shift+Enter for new line)"},
+  "extName": {
+    "message": "QuickNote Web Clipper",
+    "description": "Extension name"
+  },
+  "extDesc": {
+    "message": "Save and manage notes from any webpage with ease. Highlight text, add notes, and export them in various formats.",
+    "description": "Extension description"
+  },
+  "saveNote": {
+    "message": "Save",
+    "description": "Save button text"
+  },
+  "cancel": {
+    "message": "Cancel",
+    "description": "Cancel button text"
+  },
+  "addNotePlaceholder": {
+    "message": "Add your note here...",
+    "description": "Placeholder text for note input"
+  },
   "saving": {"message": "Saving note..."},
-  "saved": {"message": "Note saved!"},
-  "saveFailed": {"message": "Failed to save, please try again."},
-  "clearAll": {"message": "Clear All Notes"},
-  "exportNotes": {"message": "Export Notes"},
+  "saved": {
+    "message": "Note saved successfully!",
+    "description": "Success message when note is saved"
+  },
+  "saveFailed": {
+    "message": "Failed to save note. Please try again.",
+    "description": "Error message when note save fails"
+  },
+  "clearAll": {
+    "message": "Clear All",
+    "description": "Clear all notes button text"
+  },
+  "exportNotes": {
+    "message": "Export",
+    "description": "Export notes button text"
+  },
   "exportTitle": {"message": "Choose export format"},
   "exportAsJSON": {"message": "Export as JSON"},
   "exportAsText": {"message": "Export as Text"},
   "exportAsMarkdown": {"message": "Export as Markdown"},
   "noNotesToExport": {"message": "No notes to export"},
-  "confirmClearAll": {"message": "Are you sure you want to clear all notes? This action cannot be undone."},
-  "noNotes": {"message": "No notes yet"},
-  "deleteNote": {"message": "Delete this note"},
-  "confirmDeleteNote": {"message": "Are you sure you want to delete this note?"}
+  "confirmClearAll": {
+    "message": "Are you sure you want to delete all notes? This action cannot be undone.",
+    "description": "Confirmation message for clearing all notes"
+  },
+  "noNotes": {
+    "message": "No notes yet. Select text on any webpage to add a note.",
+    "description": "Message shown when no notes exist"
+  },
+  "deleteNote": {
+    "message": "Delete Note",
+    "description": "Delete note button tooltip"
+  },
+  "confirmDeleteNote": {"message": "Are you sure you want to delete this note?"},
+  "notesCount": {
+    "message": "Total Notes: $1",
+    "description": "Display total number of notes"
+  },
+  "exportFormat": {
+    "message": "Choose Export Format",
+    "description": "Export format selection title"
+  },
+  "exportTxt": {
+    "message": "Export as Text",
+    "description": "Export as text option"
+  },
+  "exportMd": {
+    "message": "Export as Markdown",
+    "description": "Export as markdown option"
+  },
+  "exportJson": {
+    "message": "Export as JSON",
+    "description": "Export as JSON option"
+  }
 } 

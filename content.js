@@ -1,87 +1,53 @@
 // 存储当前选中的文本
 let selectedText = '';
 let noteInput = null;
-let isSelectionInProgress = false;
 
-// 只监听 mouseup 事件，简化逻辑
+// 监听 mouseup 事件
 document.addEventListener('mouseup', handleMouseUp);
-
-// 监听DOMContentLoaded事件，在页面加载完成后初始化
-document.addEventListener('DOMContentLoaded', initializeExtension);
-window.addEventListener('load', initializeExtension); // 双重保险，确保即使DOMContentLoaded已错过也能初始化
 
 // 初始化扩展功能
 function initializeExtension() {
-  console.log('WebNotes扩展初始化，域名:', window.location.hostname);
+  console.log('WebNotes extension initialized');
 }
 
 // 处理鼠标释放事件
 function handleMouseUp(e) {
-  // 检查是否点击了输入框内部，如果是，不处理
+  // 检查是否点击了输入框内部
   if (noteInput && noteInput.contains(e.target)) {
     return;
   }
   
-  // 记录当前域名，用于调试
-  const currentDomain = window.location.hostname;
-  console.log('当前网站域名:', currentDomain);
-  
-  // 增加延时，确保选择完成，复杂网站可能需要更长时间
-  setTimeout(() => {
+  // 使用 requestAnimationFrame 优化性能
+  requestAnimationFrame(() => {
     const selection = window.getSelection();
     selectedText = selection.toString().trim();
     
-    // 记录选中的文本
-    console.log('选中文本长度:', selectedText ? selectedText.length : 0);
-    
     // 只在有足够长的选中文本时创建输入框
     if (selectedText && selectedText.length > 3) {
-      console.log('选中文本:', selectedText);
-      
       // 移除现有的笔记输入框
       if (noteInput) {
-        try {
-          noteInput.remove();
-        } catch (e) {
-          console.error('Error removing note input:', e);
-        }
+        noteInput.remove();
       }
       
-      // 创建笔记输入框，使用简单的位置计算
       try {
         const range = selection.getRangeAt(0);
         const rect = range.getBoundingClientRect();
         
-        // 记录选区位置信息
-        console.log('选区位置:', {
-          left: rect.left, 
-          top: rect.top, 
-          right: rect.right, 
-          bottom: rect.bottom,
-          width: rect.width,
-          height: rect.height
-        });
-        
         // 确保笔记框在可见区域内
         const x = Math.max(5, rect.right + window.scrollX);
-        const y = Math.max(5, rect.bottom + window.scrollY + 5); // 稍微偏下一点
+        const y = Math.max(5, rect.bottom + window.scrollY + 5);
         
         createNoteInput(x, y);
       } catch (e) {
-        console.error('Error getting selection position:', e);
-        
-        // 如果获取位置失败，使用鼠标位置
-        console.log('使用鼠标位置:', e.pageX, e.pageY);
+        // 使用鼠标位置作为备选
         createNoteInput(e.pageX, e.pageY);
       }
     }
-  }, 200); // 增加延时，确保在复杂网站上选择已完成
+  });
 }
 
 // 创建笔记输入框
 function createNoteInput(x, y) {
-  console.log('创建笔记输入框', x, y);
-  
   // 创建主容器
   noteInput = document.createElement('div');
   noteInput.className = 'note-input';
@@ -92,10 +58,10 @@ function createNoteInput(x, y) {
   
   // 创建文本区域
   const textarea = document.createElement('textarea');
-  textarea.className = '';
+  textarea.className = 'note-textarea';
   textarea.placeholder = chrome.i18n.getMessage('addNotePlaceholder');
   
-  // 添加键盘事件监听，支持Enter保存和Shift+Enter换行
+  // 添加键盘事件监听
   textarea.addEventListener('keydown', function(e) {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
@@ -103,7 +69,7 @@ function createNoteInput(x, y) {
     }
   });
   
-  // 将选中的文字自动填入笔记框，作为引用文本
+  // 将选中的文字自动填入笔记框
   if (selectedText) {
     textarea.value = `"${selectedText}"\n\n`;
     setTimeout(() => {
@@ -113,17 +79,17 @@ function createNoteInput(x, y) {
   
   // 创建按钮容器
   const btnGroup = document.createElement('div');
-  btnGroup.style.textAlign = 'right';
+  btnGroup.className = 'note-buttons';
   
   // 保存按钮
   const saveButton = document.createElement('button');
-  saveButton.className = '';
+  saveButton.className = 'note-button save-button';
   saveButton.textContent = chrome.i18n.getMessage('saveNote');
   saveButton.onclick = saveNote;
   
   // 取消按钮
   const cancelButton = document.createElement('button');
-  cancelButton.className = '';
+  cancelButton.className = 'note-button cancel-button';
   cancelButton.textContent = chrome.i18n.getMessage('cancel');
   cancelButton.onclick = cancelNote;
   
@@ -134,19 +100,8 @@ function createNoteInput(x, y) {
   noteInput.appendChild(btnGroup);
   
   // 添加到页面
-  try {
-    document.body.appendChild(noteInput);
-    textarea.focus();
-    textarea.selectionStart = textarea.selectionEnd = textarea.value.length;
-  } catch (e) {
-    console.error('Error appending note input to body:', e);
-    try {
-      document.documentElement.appendChild(noteInput);
-      textarea.focus();
-    } catch (e2) {
-      console.error('Error appending note input to documentElement:', e2);
-    }
-  }
+  document.body.appendChild(noteInput);
+  textarea.focus();
   
   // 点击外部关闭
   document.addEventListener('mousedown', handleClickOutside);
@@ -156,37 +111,26 @@ function createNoteInput(x, y) {
 function handleClickOutside(e) {
   if (noteInput && !noteInput.contains(e.target)) {
     cancelNote();
-    document.removeEventListener('mousedown', handleClickOutside);
   }
 }
 
 // 保存笔记
 function saveNote() {
-  if (!noteInput) {
-    console.error('保存失败：笔记输入框不存在');
-    return;
-  }
+  if (!noteInput) return;
   
   const textarea = noteInput.querySelector('textarea');
-  if (!textarea) {
-    console.error('保存失败：找不到文本区域');
-    return;
-  }
+  if (!textarea) return;
   
-  // 获取原始文本内容
   let rawText = textarea.value.trim();
-  console.log('原始笔记内容:', rawText);
   
   // 如果文本区域为空且没有选中文本，则不保存
   if (!rawText && !selectedText) {
-    console.log('没有内容可保存，取消保存');
     closeNoteInput();
     return;
   }
   
-  // 移除引用文本部分，避免重复保存
+  // 移除引用文本部分
   if (selectedText && rawText.startsWith(`"${selectedText}"`)) {
-    // 移除引用文本和后面最多两个换行符
     rawText = rawText.substring(`"${selectedText}"`.length).trim();
     if (rawText.startsWith('\n\n')) {
       rawText = rawText.substring(2).trim();
@@ -198,140 +142,37 @@ function saveNote() {
   // 准备笔记对象
   const note = {
     highlightedText: selectedText || '',
-    note: rawText || '',
+    note: rawText,
     url: window.location.href,
-    title: document.title || '无标题',
+    title: document.title,
     timestamp: new Date().toISOString()
   };
   
-  console.log('正在保存笔记对象:', note);
-  
-  // 保存到本地存储
-  saveNoteLocally(note);
-}
-
-// 保存笔记到本地，尝试通过后台脚本，如果失败则直接保存
-function saveNoteLocally(note) {
-  try {
-    // 先显示保存中提示
-    showSavingNotification();
+  // 直接保存到本地存储
+  chrome.storage.local.get(['notes'], function(result) {
+    const notes = result.notes || [];
+    notes.push(note);
     
-    // 检查 chrome.runtime 是否可用
-    if (typeof chrome !== 'undefined' && chrome.runtime) {
-      // 尝试通过消息发送到后台
-      chrome.runtime.sendMessage({
-        action: 'saveNote',
-        note: note
-      }, function(response) {
-        // 检查是否发生了错误
-        if (chrome.runtime.lastError) {
-          console.error('消息发送错误:', chrome.runtime.lastError);
-          // 如果是上下文失效错误，尝试直接保存
-          directlySaveNote(note);
-          return;
-        }
-        
-        console.log('保存笔记响应:', response);
-        
-        if (response && response.success) {
-          console.log('笔记保存成功');
-          // 尝试高亮选中的文本
-          tryHighlightText();
-          // 显示保存成功提示
-          showSavedNotification();
-        } else {
-          console.error('通过后台保存失败，尝试直接保存:', response ? response.error : '未知错误');
-          // 尝试直接保存
-          directlySaveNote(note);
-          return;
-        }
-        
-        // 关闭笔记输入框
-        closeNoteInput();
-      });
-    } else {
-      // 如果 chrome.runtime 不可用，直接保存
-      console.log('chrome.runtime 不可用，使用直接保存方式');
-      directlySaveNote(note);
-    }
-  } catch (error) {
-    console.error('保存过程中发生错误:', error);
-    // 尝试直接保存
-    directlySaveNote(note);
-  }
-}
-
-// 直接保存笔记到本地存储（不通过后台脚本）
-function directlySaveNote(note) {
-  try {
-    // 直接使用 chrome.storage.local API
-    chrome.storage.local.get(['notes'], function(result) {
+    chrome.storage.local.set({ notes: notes }, function() {
       if (chrome.runtime.lastError) {
-        console.error('读取存储时出错:', chrome.runtime.lastError);
         showErrorNotification(chrome.i18n.getMessage('saveFailed'));
         return;
       }
       
-      const notes = result.notes || [];
-      notes.push(note);
-      
-      chrome.storage.local.set({ notes: notes }, function() {
-        if (chrome.runtime.lastError) {
-          console.error('写入存储时出错:', chrome.runtime.lastError);
-          showErrorNotification(chrome.i18n.getMessage('saveFailed'));
-          return;
-        }
-        
-        console.log('笔记直接保存成功');
-        tryHighlightText();
-        showSavedNotification();
-        closeNoteInput();
-      });
+      showSavedNotification();
+      closeNoteInput();
     });
-  } catch (error) {
-    console.error('直接保存失败:', error);
-    showErrorNotification('保存笔记时发生错误，请刷新页面后重试。');
-    // 仍然关闭输入框，避免用户困惑
-    closeNoteInput();
-  }
-}
-
-// 尝试高亮文本的辅助函数
-function tryHighlightText() {
-  try {
-    if (selectedText) {
-      highlightSelectedText();
-    }
-  } catch (e) {
-    console.error('高亮文本失败:', e);
-  }
-}
-
-// 显示保存中的通知
-function showSavingNotification() {
-  const notification = document.createElement('div');
-  notification.id = 'web-notes-saving-notification';
-  notification.className = '';
-  notification.textContent = '正在保存笔记...';
-  
-  document.body.appendChild(notification);
+  });
 }
 
 // 显示保存成功的通知
 function showSavedNotification() {
-  // 移除保存中通知
-  const savingNotification = document.getElementById('web-notes-saving-notification');
-  if (savingNotification) {
-    savingNotification.remove();
-  }
-  
   const notification = document.createElement('div');
-  notification.className = '';
-  notification.textContent = '笔记保存成功！';
+  notification.className = 'note-notification saved';
+  notification.textContent = chrome.i18n.getMessage('saved');
   
   document.body.appendChild(notification);
   
-  // 2秒后自动消失
   setTimeout(() => {
     notification.remove();
   }, 2000);
@@ -339,19 +180,12 @@ function showSavedNotification() {
 
 // 显示错误通知
 function showErrorNotification(message) {
-  // 移除保存中通知
-  const savingNotification = document.getElementById('web-notes-saving-notification');
-  if (savingNotification) {
-    savingNotification.remove();
-  }
-  
   const notification = document.createElement('div');
-  notification.className = '';
-  notification.textContent = message || '保存失败，请重试';
+  notification.className = 'note-notification error';
+  notification.textContent = message || chrome.i18n.getMessage('saveFailed');
   
   document.body.appendChild(notification);
   
-  // 3秒后自动消失
   setTimeout(() => {
     notification.remove();
   }, 3000);
@@ -363,212 +197,14 @@ function closeNoteInput() {
     noteInput.remove();
     noteInput = null;
     selectedText = '';
-    // 移除点击外部的事件监听
     document.removeEventListener('mousedown', handleClickOutside);
   }
 }
 
 // 取消记笔记
 function cancelNote() {
-  console.log('取消记笔记');
   closeNoteInput();
 }
 
-// 高亮选中的文本
-function highlightSelectedText() {
-  const selection = window.getSelection();
-  if (!selection.rangeCount) return;
-  
-  try {
-    const range = selection.getRangeAt(0);
-    
-    // 更安全的高亮方法
-    try {
-      // 尝试简单的包裹方法
-      const span = document.createElement('span');
-      span.className = 'web-notes-highlight';
-      span.style.backgroundColor = '#ffeb3b';
-      span.style.cursor = 'pointer';
-      span.dataset.timestamp = new Date().toISOString(); // 添加时间戳用于识别
-      range.surroundContents(span);
-      selection.removeAllRanges(); // 清除选区
-    } catch (e) {
-      console.log('简单高亮失败，尝试复杂方法:', e);
-      
-      // 如果简单方法失败（通常是因为选择跨越多个元素），使用复杂方法
-      const highlightId = 'highlight-' + Date.now();
-      const highlightClass = 'web-notes-highlight';
-      
-      // 创建临时标记以标识范围起点和终点
-      const startMarker = document.createElement('span');
-      startMarker.id = 'start-' + highlightId;
-      const endMarker = document.createElement('span');
-      endMarker.id = 'end-' + highlightId;
-      
-      // 克隆范围以不影响原始选择
-      const tempRange = range.cloneRange();
-      
-      // 插入标记
-      tempRange.collapse(true);
-      tempRange.insertNode(startMarker);
-      tempRange.setEnd(range.endContainer, range.endOffset);
-      tempRange.collapse(false);
-      tempRange.insertNode(endMarker);
-      
-      // 获取包含这两个标记的所有节点
-      const walker = document.createTreeWalker(
-        document.body, 
-        NodeFilter.SHOW_TEXT, 
-        null, 
-        false
-      );
-      
-      // 寻找开始标记
-      let node;
-      let startFound = false;
-      let endFound = false;
-      
-      while (node = walker.nextNode()) {
-        // 检查节点是否在标记之间
-        const nodeRange = document.createRange();
-        nodeRange.selectNodeContents(node);
-        
-        const nodeBefore = nodeRange.compareBoundaryPoints(Range.START_TO_END, tempRange) <= 0;
-        const nodeAfter = nodeRange.compareBoundaryPoints(Range.END_TO_START, tempRange) >= 0;
-        
-        if (!nodeBefore && !nodeAfter) {
-          // 节点在范围内，高亮它
-          const span = document.createElement('span');
-          span.className = highlightClass;
-          span.style.backgroundColor = '#ffeb3b';
-          span.style.cursor = 'pointer';
-          node.parentNode.insertBefore(span, node);
-          span.appendChild(node);
-        }
-      }
-      
-      // 移除临时标记
-      if (startMarker.parentNode) startMarker.parentNode.removeChild(startMarker);
-      if (endMarker.parentNode) endMarker.parentNode.removeChild(endMarker);
-    }
-  } catch (e) {
-    console.error('Error highlighting text:', e);
-  }
-}
-
-// 点击高亮文本时显示笔记
-document.addEventListener('click', function(e) {
-  if (e.target.classList.contains('web-notes-highlight')) {
-    // 获取该高亮文本内容
-    const highlightedText = e.target.textContent;
-    
-    // 尝试从本地存储获取笔记
-    try {
-      chrome.storage.local.get(['notes'], function(result) {
-        if (chrome.runtime.lastError) {
-          console.error('获取笔记数据时出错:', chrome.runtime.lastError);
-          alert('无法加载笔记数据，请刷新页面后重试');
-          return;
-        }
-        
-        const notes = result.notes || [];
-        const note = notes.find(n => n.url === window.location.href && n.highlightedText === highlightedText);
-        
-        if (note) {
-          // 显示笔记内容
-          showNotePopup(note, e);
-        } else {
-          // 尝试通过后台获取
-          tryGetNoteFromBackground(highlightedText, e);
-        }
-      });
-    } catch (error) {
-      console.error('获取高亮笔记时出错:', error);
-      // 尝试通过后台获取
-      tryGetNoteFromBackground(highlightedText, e);
-    }
-  }
-});
-
-// 通过后台脚本获取笔记
-function tryGetNoteFromBackground(text, event) {
-  try {
-    chrome.runtime.sendMessage({
-      action: 'getNote',
-      url: window.location.href,
-      text: text
-    }, function(response) {
-      if (chrome.runtime.lastError) {
-        console.error('获取笔记消息发送出错:', chrome.runtime.lastError);
-        alert(`未找到相关笔记`);
-        return;
-      }
-      
-      if (response && response.note) {
-        showNotePopup(response.note, event);
-      } else {
-        alert(`未找到相关笔记`);
-      }
-    });
-  } catch (error) {
-    console.error('通过后台获取笔记失败:', error);
-    alert(`未找到相关笔记`);
-  }
-}
-
-// 显示笔记弹窗
-function showNotePopup(note, event) {
-  // 先移除已有的弹窗
-  const existingPopup = document.querySelector('.web-notes-popup');
-  if (existingPopup) {
-    existingPopup.remove();
-  }
-
-  // 创建弹窗
-  const popup = document.createElement('div');
-  popup.className = 'web-notes-popup';
-  popup.style.position = 'absolute';
-  popup.style.left = `${event.pageX}px`;
-  popup.style.top = `${event.pageY + 20}px`;
-  popup.style.zIndex = '2147483647';
-
-  // 创建内容
-  let html = '';
-  if (note.highlightedText) {
-    html += `<div style=\"color: #666; font-style: italic; margin-bottom: 8px; border-left: 3px solid #f5e663; padding-left: 8px;\">\"${note.highlightedText}\"</div>`;
-  }
-  if (note.note && note.note.trim() !== '') {
-    html += `<div style=\"margin-bottom: 8px;\">${note.note}</div>`;
-  }
-  const date = new Date(note.timestamp);
-  html += `<div class=\"note-meta\">${date.toLocaleString()}</div>`;
-  popup.innerHTML = html;
-
-  // 添加关闭按钮
-  const closeButton = document.createElement('button');
-  closeButton.className = '';
-  closeButton.textContent = '×';
-  closeButton.style.position = 'absolute';
-  closeButton.style.top = '5px';
-  closeButton.style.right = '5px';
-  closeButton.onclick = () => popup.remove();
-  popup.appendChild(closeButton);
-
-  // 添加关闭事件
-  document.addEventListener('click', function closePopup(e) {
-    if (!popup.contains(e.target)) {
-      popup.remove();
-      document.removeEventListener('click', closePopup);
-    }
-  });
-
-  // 添加到页面
-  document.body.appendChild(popup);
-}
-
-// 处理键盘事件：Esc键关闭输入框
-document.addEventListener('keydown', function(e) {
-  if (e.key === 'Escape' && noteInput) {
-    cancelNote();
-  }
-}); 
+// 初始化
+initializeExtension(); 

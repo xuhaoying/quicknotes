@@ -1,195 +1,40 @@
-// 当弹出窗口打开时加载笔记
+// 初始化
 document.addEventListener('DOMContentLoaded', function() {
+  // 设置标题和按钮文本
+  document.getElementById('title').textContent = chrome.i18n.getMessage('extName');
+  document.getElementById('clearAllBtn').textContent = chrome.i18n.getMessage('clearAll');
+  document.getElementById('exportBtn').textContent = chrome.i18n.getMessage('exportNotes');
+  
+  // 加载笔记
   loadNotes();
   
-  // 添加按钮容器 - 用于放置所有操作按钮
-  const buttonContainer = document.createElement('div');
-  buttonContainer.className = 'button-container';
-  
-  // 添加清空全部笔记按钮
-  const clearButton = document.createElement('button');
-  clearButton.textContent = chrome.i18n.getMessage('clearAll');
-  clearButton.className = 'clear-all-btn';
-  clearButton.onclick = confirmClearAllNotes;
-  
-  // 添加导出按钮
-  const exportButton = document.createElement('button');
-  exportButton.textContent = chrome.i18n.getMessage('exportNotes');
-  exportButton.className = 'export-btn';
-  exportButton.onclick = showExportOptions;
-  
-  // 将按钮添加到容器
-  buttonContainer.appendChild(exportButton);
-  buttonContainer.appendChild(clearButton);
-  
-  // 添加到页面
-  const container = document.querySelector('.container');
-  const title = document.querySelector('h1');
-  title.textContent = chrome.i18n.getMessage('exportTitle');
-  container.insertBefore(buttonContainer, title.nextSibling);
+  // 添加事件监听器
+  document.getElementById('clearAllBtn').addEventListener('click', clearAllNotes);
+  document.getElementById('exportBtn').addEventListener('click', showExportMenu);
 });
 
-// 显示导出选项
-function showExportOptions() {
-  // 获取笔记数据
-  chrome.storage.local.get(['notes'], function(result) {
-    const notes = result.notes || [];
-    
-    if (notes.length === 0) {
-      alert(chrome.i18n.getMessage('noNotesToExport'));
-      return;
-    }
-    
-    // 创建导出菜单
-    const exportMenu = document.createElement('div');
-    exportMenu.className = 'export-menu';
-    
-    // 创建标题
-    const title = document.createElement('h3');
-    title.textContent = chrome.i18n.getMessage('exportTitle');
-    exportMenu.appendChild(title);
-    
-    // 创建导出选项按钮
-    const jsonBtn = document.createElement('button');
-    jsonBtn.textContent = chrome.i18n.getMessage('exportAsJSON');
-    jsonBtn.className = 'export-option-btn';
-    jsonBtn.onclick = () => exportNotes(notes, 'json');
-    
-    const textBtn = document.createElement('button');
-    textBtn.textContent = chrome.i18n.getMessage('exportAsText');
-    textBtn.className = 'export-option-btn';
-    textBtn.onclick = () => exportNotes(notes, 'text');
-    
-    const markdownBtn = document.createElement('button');
-    markdownBtn.textContent = chrome.i18n.getMessage('exportAsMarkdown');
-    markdownBtn.className = 'export-option-btn';
-    markdownBtn.onclick = () => exportNotes(notes, 'markdown');
-    
-    const closeBtn = document.createElement('button');
-    closeBtn.textContent = chrome.i18n.getMessage('cancel');
-    closeBtn.className = 'export-cancel-btn';
-    closeBtn.onclick = () => document.body.removeChild(exportMenu);
-    
-    // 添加按钮到菜单
-    exportMenu.appendChild(jsonBtn);
-    exportMenu.appendChild(textBtn);
-    exportMenu.appendChild(markdownBtn);
-    exportMenu.appendChild(closeBtn);
-    
-    // 添加菜单到页面
-    document.body.appendChild(exportMenu);
-  });
-}
-
-// 导出笔记函数
-function exportNotes(notes, format) {
-  let content = '';
-  let filename = `web-notes-${new Date().toISOString().split('T')[0]}`;
-  let dataType = '';
-  
-  if (format === 'json') {
-    content = JSON.stringify(notes, null, 2);
-    filename += '.json';
-    dataType = 'application/json';
-  } 
-  else if (format === 'markdown') {
-    content = notes.map(note => {
-      let noteText = `# ${note.title}\n\n`;
-      noteText += `*${new Date(note.timestamp).toLocaleString()}*\n\n`;
-      noteText += `来源: ${note.url}\n\n`;
-      
-      if (note.highlightedText) {
-        noteText += `> ${note.highlightedText}\n\n`;
-      }
-      
-      if (note.note) {
-        noteText += `${note.note}\n\n`;
-      }
-      
-      noteText += `---\n\n`;
-      return noteText;
-    }).join('');
-    
-    filename += '.md';
-    dataType = 'text/markdown';
-  }
-  else { // 纯文本格式
-    content = notes.map(note => {
-      let noteText = `【网站标题】${note.title}\n`;
-      noteText += `【时间】${new Date(note.timestamp).toLocaleString()}\n`;
-      noteText += `【网址】${note.url}\n`;
-      
-      if (note.highlightedText) {
-        noteText += `【引用文本】${note.highlightedText}\n`;
-      }
-      
-      if (note.note) {
-        noteText += `【我的笔记】${note.note}\n`;
-      }
-      
-      noteText += `\n----------------------\n\n`;
-      return noteText;
-    }).join('');
-    
-    filename += '.txt';
-    dataType = 'text/plain';
-  }
-  
-  // 创建下载链接
-  const blob = new Blob([content], { type: dataType });
-  const url = URL.createObjectURL(blob);
-  
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = filename;
-  
-  // 模拟点击下载
-  document.body.appendChild(a);
-  a.click();
-  
-  // 清理
-  setTimeout(() => {
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-    
-    // 移除导出菜单
-    const exportMenu = document.querySelector('.export-menu');
-    if (exportMenu) {
-      document.body.removeChild(exportMenu);
-    }
-  }, 100);
-}
-
-// 确认是否清空所有笔记
-function confirmClearAllNotes() {
-  if (confirm(chrome.i18n.getMessage('confirmClearAll'))) {
-    chrome.storage.local.set({ notes: [] }, function() {
-      loadNotes(); // 重新加载笔记列表（此时为空）
-    });
-  }
-}
-
-// 加载所有笔记
+// 加载笔记
 function loadNotes() {
   chrome.storage.local.get(['notes'], function(result) {
     const notes = result.notes || [];
-    const notesList = document.getElementById('notes-list');
+    const notesList = document.getElementById('notesList');
+    const notesCount = document.getElementById('notesCount');
+    
+    // 更新笔记数量
+    notesCount.textContent = chrome.i18n.getMessage('notesCount', [notes.length]);
+    
+    // 清空现有笔记
     notesList.innerHTML = '';
     
     if (notes.length === 0) {
-      notesList.innerHTML = '<p class="no-notes">' + chrome.i18n.getMessage('noNotes') + '</p>';
+      notesList.innerHTML = `<div class="no-notes">${chrome.i18n.getMessage('noNotes')}</div>`;
       return;
     }
     
-    // 显示笔记总数
-    const countElement = document.createElement('div');
-    countElement.className = 'notes-count';
-    countElement.textContent = `共 ${notes.length} 条笔记`;
-    notesList.appendChild(countElement);
-    
-    // 按时间倒序排列笔记
+    // 按时间倒序排序
     notes.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
     
+    // 添加笔记
     notes.forEach((note, index) => {
       const noteElement = createNoteElement(note, index);
       notesList.appendChild(noteElement);
@@ -199,61 +44,164 @@ function loadNotes() {
 
 // 创建笔记元素
 function createNoteElement(note, index) {
-  const div = document.createElement('div');
-  div.className = 'note-item';
-  div.dataset.index = index;
+  const noteDiv = document.createElement('div');
+  noteDiv.className = 'note-item';
   
-  const date = new Date(note.timestamp);
-  const formattedDate = date.toLocaleString();
+  // 添加高亮文本
+  if (note.highlightedText) {
+    const highlightText = document.createElement('div');
+    highlightText.className = 'note-text highlight-text';
+    highlightText.textContent = note.highlightedText;
+    noteDiv.appendChild(highlightText);
+  }
   
-  let html = '';
+  // 添加用户笔记
+  if (note.note) {
+    const noteText = document.createElement('div');
+    noteText.className = 'note-text user-note';
+    noteText.textContent = note.note;
+    noteDiv.appendChild(noteText);
+  }
+  
+  // 添加分隔线
+  if (note.highlightedText && note.note) {
+    const divider = document.createElement('div');
+    divider.className = 'note-divider';
+    noteDiv.appendChild(divider);
+  }
+  
+  // 添加来源链接
+  const urlLink = document.createElement('a');
+  urlLink.className = 'note-url';
+  urlLink.href = note.url;
+  urlLink.textContent = note.title || note.url;
+  urlLink.target = '_blank';
+  noteDiv.appendChild(urlLink);
+  
+  // 添加时间戳
+  const meta = document.createElement('div');
+  meta.className = 'note-meta';
+  meta.textContent = new Date(note.timestamp).toLocaleString();
+  noteDiv.appendChild(meta);
   
   // 添加删除按钮
-  html += `<div class="note-actions">
-    <button class="delete-note-btn" title="${chrome.i18n.getMessage('deleteNote')}">×</button>
-  </div>`;
+  const deleteBtn = document.createElement('button');
+  deleteBtn.className = 'delete-note-btn';
+  deleteBtn.textContent = '×';
+  deleteBtn.title = chrome.i18n.getMessage('deleteNote');
+  deleteBtn.onclick = () => deleteNote(index);
   
-  if (note.highlightedText) {
-    html += `<div class="note-text highlight-text"><strong>引用文本：</strong>${note.highlightedText}</div>`;
-  }
+  const actions = document.createElement('div');
+  actions.className = 'note-actions';
+  actions.appendChild(deleteBtn);
+  noteDiv.appendChild(actions);
   
-  if (note.note && note.note.trim() !== '') {
-    html += `<div class="note-text user-note"><strong>我的笔记：</strong>${note.note}</div>`;
-  }
-  
-  html += `
-    <div class="note-meta">
-      <a href="${note.url}" class="note-url" target="_blank">${note.url}</a>
-      <span> - ${formattedDate}</span>
-    </div>
-  `;
-  
-  div.innerHTML = html;
-  
-  // 添加删除笔记事件监听
-  setTimeout(() => {
-    const deleteBtn = div.querySelector('.delete-note-btn');
-    if (deleteBtn) {
-      deleteBtn.addEventListener('click', function() {
-        deleteNote(index);
-      });
-    }
-  }, 0);
-  
-  return div;
+  return noteDiv;
 }
 
-// 删除指定笔记
+// 删除笔记
 function deleteNote(index) {
   chrome.storage.local.get(['notes'], function(result) {
     const notes = result.notes || [];
-    if (index >= 0 && index < notes.length) {
-      if (confirm(chrome.i18n.getMessage('confirmDeleteNote'))) {
-        notes.splice(index, 1);
-        chrome.storage.local.set({ notes: notes }, function() {
-          loadNotes(); // 重新加载笔记列表
-        });
-      }
+    notes.splice(index, 1);
+    
+    chrome.storage.local.set({ notes: notes }, function() {
+      loadNotes();
+    });
+  });
+}
+
+// 清空所有笔记
+function clearAllNotes() {
+  if (confirm(chrome.i18n.getMessage('confirmClearAll'))) {
+    chrome.storage.local.set({ notes: [] }, function() {
+      loadNotes();
+    });
+  }
+}
+
+// 显示导出菜单
+function showExportMenu() {
+  const menu = document.createElement('div');
+  menu.className = 'export-menu';
+  menu.innerHTML = `
+    <h3>${chrome.i18n.getMessage('exportFormat')}</h3>
+    <button class="export-option-btn" data-format="txt">${chrome.i18n.getMessage('exportTxt')}</button>
+    <button class="export-option-btn" data-format="md">${chrome.i18n.getMessage('exportMd')}</button>
+    <button class="export-option-btn" data-format="json">${chrome.i18n.getMessage('exportJson')}</button>
+    <button class="export-cancel-btn">${chrome.i18n.getMessage('cancel')}</button>
+  `;
+  
+  // 添加事件监听器
+  menu.querySelectorAll('.export-option-btn').forEach(btn => {
+    btn.onclick = () => {
+      exportNotes(btn.dataset.format);
+      menu.remove();
+    };
+  });
+  
+  menu.querySelector('.export-cancel-btn').onclick = () => menu.remove();
+  
+  document.body.appendChild(menu);
+}
+
+// 导出笔记
+function exportNotes(format) {
+  chrome.storage.local.get(['notes'], function(result) {
+    const notes = result.notes || [];
+    let content = '';
+    let filename = 'notes';
+    let mimeType = 'text/plain';
+    
+    switch (format) {
+      case 'txt':
+        content = notes.map(note => {
+          let text = '';
+          if (note.highlightedText) {
+            text += `Highlight: ${note.highlightedText}\n`;
+          }
+          if (note.note) {
+            text += `Note: ${note.note}\n`;
+          }
+          text += `Source: ${note.title || note.url}\n`;
+          text += `Time: ${new Date(note.timestamp).toLocaleString()}\n`;
+          text += '---\n';
+          return text;
+        }).join('\n');
+        filename += '.txt';
+        break;
+        
+      case 'md':
+        content = notes.map(note => {
+          let text = '';
+          if (note.highlightedText) {
+            text += `> ${note.highlightedText}\n\n`;
+          }
+          if (note.note) {
+            text += `${note.note}\n\n`;
+          }
+          text += `[Source](${note.url}) - ${new Date(note.timestamp).toLocaleString()}\n`;
+          text += '---\n';
+          return text;
+        }).join('\n');
+        filename += '.md';
+        mimeType = 'text/markdown';
+        break;
+        
+      case 'json':
+        content = JSON.stringify(notes, null, 2);
+        filename += '.json';
+        mimeType = 'application/json';
+        break;
     }
+    
+    // 创建下载链接
+    const blob = new Blob([content], { type: mimeType });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    a.click();
+    URL.revokeObjectURL(url);
   });
 } 

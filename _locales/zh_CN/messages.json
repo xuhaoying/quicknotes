@@ -1,21 +1,77 @@
 {
-  "extName": {"message": "QuickNote 网页笔记"},
-  "extDesc": {"message": "一键高亮、批注和保存网页笔记，支持导出，助力高效学习与研究。"},
-  "saveNote": {"message": "保存笔记"},
-  "cancel": {"message": "取消"},
-  "addNotePlaceholder": {"message": "添加笔记...（Enter保存，Shift+Enter换行）"},
+  "extName": {
+    "message": "快速笔记网页剪藏",
+    "description": "扩展名称"
+  },
+  "extDesc": {
+    "message": "轻松保存和管理网页笔记。高亮文本，添加笔记，并支持多种格式导出。",
+    "description": "扩展描述"
+  },
+  "saveNote": {
+    "message": "保存",
+    "description": "保存按钮文本"
+  },
+  "cancel": {
+    "message": "取消",
+    "description": "取消按钮文本"
+  },
+  "addNotePlaceholder": {
+    "message": "在此添加笔记...",
+    "description": "笔记输入框占位符"
+  },
   "saving": {"message": "正在保存笔记..."},
-  "saved": {"message": "笔记保存成功！"},
-  "saveFailed": {"message": "保存失败，请重试。"},
-  "clearAll": {"message": "清空全部笔记"},
-  "exportNotes": {"message": "导出笔记"},
+  "saved": {
+    "message": "笔记保存成功！",
+    "description": "笔记保存成功提示"
+  },
+  "saveFailed": {
+    "message": "保存失败，请重试。",
+    "description": "笔记保存失败提示"
+  },
+  "clearAll": {
+    "message": "清空全部",
+    "description": "清空全部笔记按钮文本"
+  },
+  "exportNotes": {
+    "message": "导出",
+    "description": "导出笔记按钮文本"
+  },
   "exportTitle": {"message": "选择导出格式"},
   "exportAsJSON": {"message": "导出为 JSON"},
   "exportAsText": {"message": "导出为纯文本"},
   "exportAsMarkdown": {"message": "导出为 Markdown"},
   "noNotesToExport": {"message": "没有笔记可供导出"},
-  "confirmClearAll": {"message": "确定要清空所有笔记吗？这个操作不可撤销。"},
-  "noNotes": {"message": "暂无笔记"},
-  "deleteNote": {"message": "删除此笔记"},
-  "confirmDeleteNote": {"message": "确定要删除这条笔记吗？"}
+  "confirmClearAll": {
+    "message": "确定要删除所有笔记吗？此操作无法撤销。",
+    "description": "清空全部笔记的确认消息"
+  },
+  "noNotes": {
+    "message": "暂无笔记。在任意网页选择文本即可添加笔记。",
+    "description": "无笔记时显示的消息"
+  },
+  "deleteNote": {
+    "message": "删除笔记",
+    "description": "删除笔记按钮提示"
+  },
+  "confirmDeleteNote": {"message": "确定要删除这条笔记吗？"},
+  "notesCount": {
+    "message": "笔记总数：$1",
+    "description": "显示笔记总数"
+  },
+  "exportFormat": {
+    "message": "选择导出格式",
+    "description": "导出格式选择标题"
+  },
+  "exportTxt": {
+    "message": "导出为文本",
+    "description": "导出为文本选项"
+  },
+  "exportMd": {
+    "message": "导出为 Markdown",
+    "description": "导出为 Markdown 选项"
+  },
+  "exportJson": {
+    "message": "导出为 JSON",
+    "description": "导出为 JSON 选项"
+  }
 } 
