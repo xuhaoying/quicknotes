@@ -1,3 +1,164 @@
+body, .container {
+  font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+  background: #fafbfc;
+  color: #222;
+  margin: 0;
+}
+
+.note-input, .web-notes-popup {
+  border-radius: 10px;
+  background: #fff;
+  border: 1px solid #e3e5e8;
+  padding: 18px 20px 16px 20px;
+  min-width: 280px;
+  max-width: 96vw;
+  box-sizing: border-box;
+  box-shadow: none;
+  font-size: 15px;
+}
+
+.note-input textarea {
+  border: 1px solid #e3e5e8;
+  border-radius: 6px;
+  padding: 10px;
+  font-size: 15px;
+  width: 100%;
+  min-height: 80px;
+  margin-bottom: 12px;
+  background: #fafbfc;
+  color: #222;
+  resize: vertical;
+  box-sizing: border-box;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.note-input textarea:focus {
+  border-color: #4f8cff;
+}
+
+.note-input button, .web-notes-popup button {
+  border: none;
+  border-radius: 6px;
+  background: #f5f6fa;
+  color: #222;
+  padding: 7px 18px;
+  font-size: 15px;
+  margin-left: 8px;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.note-input button:hover, .web-notes-popup button:hover {
+  background: #e3e5e8;
+  color: #2563eb;
+}
+
+.note-input button:first-child {
+  background: #2563eb;
+  color: #fff;
+  margin-left: 0;
+}
+.note-input button:first-child:hover {
+  background: #1749b1;
+  color: #fff;
+}
+
+.web-notes-highlight {
+  background: #f5e663;
+  border-radius: 2px;
+  padding: 0 2px;
+  transition: background 0.2s;
+}
+
+.web-notes-popup {
+  min-width: 220px;
+  max-width: 90vw;
+  border-radius: 10px;
+  border: 1px solid #e3e5e8;
+  background: #fff;
+  font-size: 15px;
+  padding: 18px 20px 16px 20px;
+  box-shadow: none;
+}
+.web-notes-popup button {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background: transparent;
+  color: #bbb;
+  font-size: 18px;
+  padding: 0 8px;
+  border-radius: 50%;
+}
+.web-notes-popup button:hover {
+  background: #f5f6fa;
+  color: #2563eb;
+}
+
+.note-meta {
+  font-size: 12px;
+  color: #999;
+  margin-top: 8px;
+}
+
+/* 通知样式 */
+#web-notes-saving-notification {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: #fff;
+  color: #2563eb;
+  border: 1px solid #e3e5e8;
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-size: 15px;
+  z-index: 2147483647;
+  box-shadow: none;
+}
+
+/* 暗色模式 */
+@media (prefers-color-scheme: dark) {
+  body, .container {
+    background: #181c20;
+    color: #eee;
+  }
+  .note-input, .web-notes-popup {
+    background: #23272f;
+    color: #eee;
+    border: 1px solid #333a45;
+  }
+  .note-input textarea {
+    background: #23272f;
+    color: #eee;
+    border-color: #333a45;
+  }
+  .note-input textarea:focus {
+    border-color: #4f8cff;
+  }
+  .web-notes-highlight {
+    background: #ffe06655;
+  }
+  .web-notes-popup {
+    background: #23272f;
+    color: #eee;
+    border: 1px solid #333a45;
+  }
+  .web-notes-popup button {
+    color: #888;
+  }
+  .web-notes-popup button:hover {
+    background: #23272f;
+    color: #4f8cff;
+  }
+  #web-notes-saving-notification {
+    background: #23272f;
+    color: #4f8cff;
+    border: 1px solid #333a45;
+  }
+  .note-meta {
+    color: #888;
+  }
+}
+
 /* Popup styles */
 .container {
   width: 400px;
@@ -171,11 +332,6 @@ h1 {
   height: 1px;
   background-color: #ddd;
   margin: 10px 0;
-}
-
-.note-meta {
-  font-size: 12px;
-  color: #666;
 }
 
 .note-url {

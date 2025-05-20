@@ -85,53 +85,27 @@ function createNoteInput(x, y) {
   // 创建主容器
   noteInput = document.createElement('div');
   noteInput.className = 'note-input';
-  
-  // 设置内联样式确保显示
-  Object.assign(noteInput.style, {
-    position: 'absolute',
-    left: `${x}px`,
-    top: `${y}px`,
-    zIndex: '2147483647',
-    backgroundColor: 'white',
-    border: '1px solid #ccc',
-    borderRadius: '4px',
-    padding: '10px',
-    boxShadow: '0 2px 10px rgba(0,0,0,0.2)',
-    width: '300px',
-    fontFamily: 'Arial, sans-serif',
-    fontSize: '14px',
-    color: '#333'
-  });
+  noteInput.style.position = 'absolute';
+  noteInput.style.left = `${x}px`;
+  noteInput.style.top = `${y}px`;
+  noteInput.style.zIndex = '2147483647';
   
   // 创建文本区域
   const textarea = document.createElement('textarea');
-  Object.assign(textarea.style, {
-    width: '100%',
-    minHeight: '80px',
-    marginBottom: '10px',
-    padding: '8px',
-    boxSizing: 'border-box',
-    border: '1px solid #ddd',
-    borderRadius: '3px',
-    fontFamily: 'Arial, sans-serif',
-    fontSize: '14px'
-  });
+  textarea.className = '';
   textarea.placeholder = '添加笔记... (按Enter保存，Shift+Enter换行)';
   
   // 添加键盘事件监听，支持Enter保存和Shift+Enter换行
   textarea.addEventListener('keydown', function(e) {
-    // 按Enter键保存（非Shift+Enter）
     if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault(); // 阻止默认行为
+      e.preventDefault();
       saveNote();
     }
-    // Shift+Enter可以输入换行，不需要特殊处理
   });
   
   // 将选中的文字自动填入笔记框，作为引用文本
   if (selectedText) {
     textarea.value = `"${selectedText}"\n\n`;
-    // 将光标定位到文本末尾
     setTimeout(() => {
       textarea.selectionStart = textarea.selectionEnd = textarea.value.length;
     }, 0);
@@ -143,30 +117,13 @@ function createNoteInput(x, y) {
   
   // 保存按钮
   const saveButton = document.createElement('button');
-  Object.assign(saveButton.style, {
-    backgroundColor: '#4CAF50',
-    color: 'white',
-    border: 'none',
-    padding: '6px 12px',
-    borderRadius: '3px',
-    cursor: 'pointer',
-    fontSize: '14px'
-  });
+  saveButton.className = '';
   saveButton.textContent = '保存笔记';
   saveButton.onclick = saveNote;
   
   // 取消按钮
   const cancelButton = document.createElement('button');
-  Object.assign(cancelButton.style, {
-    backgroundColor: '#f44336',
-    color: 'white',
-    border: 'none',
-    padding: '6px 12px',
-    borderRadius: '3px',
-    marginLeft: '8px',
-    cursor: 'pointer',
-    fontSize: '14px'
-  });
+  cancelButton.className = '';
   cancelButton.textContent = '取消';
   cancelButton.onclick = cancelNote;
   
@@ -179,13 +136,11 @@ function createNoteInput(x, y) {
   // 添加到页面
   try {
     document.body.appendChild(noteInput);
-    // 自动聚焦到文本框并将光标移到末尾
     textarea.focus();
     textarea.selectionStart = textarea.selectionEnd = textarea.value.length;
   } catch (e) {
     console.error('Error appending note input to body:', e);
     try {
-      // 备选方案：添加到文档
       document.documentElement.appendChild(noteInput);
       textarea.focus();
     } catch (e2) {
@@ -349,18 +304,7 @@ function tryHighlightText() {
 function showSavingNotification() {
   const notification = document.createElement('div');
   notification.id = 'web-notes-saving-notification';
-  Object.assign(notification.style, {
-    position: 'fixed',
-    bottom: '20px',
-    right: '20px',
-    backgroundColor: '#2196F3',
-    color: 'white',
-    padding: '10px 20px',
-    borderRadius: '4px',
-    zIndex: '2147483647',
-    boxShadow: '0 2px 10px rgba(0,0,0,0.2)',
-    fontFamily: 'Arial, sans-serif'
-  });
+  notification.className = '';
   notification.textContent = '正在保存笔记...';
   
   document.body.appendChild(notification);
@@ -375,18 +319,7 @@ function showSavedNotification() {
   }
   
   const notification = document.createElement('div');
-  Object.assign(notification.style, {
-    position: 'fixed',
-    bottom: '20px',
-    right: '20px',
-    backgroundColor: '#4CAF50',
-    color: 'white',
-    padding: '10px 20px',
-    borderRadius: '4px',
-    zIndex: '2147483647',
-    boxShadow: '0 2px 10px rgba(0,0,0,0.2)',
-    fontFamily: 'Arial, sans-serif'
-  });
+  notification.className = '';
   notification.textContent = '笔记保存成功！';
   
   document.body.appendChild(notification);
@@ -406,18 +339,7 @@ function showErrorNotification(message) {
   }
   
   const notification = document.createElement('div');
-  Object.assign(notification.style, {
-    position: 'fixed',
-    bottom: '20px',
-    right: '20px',
-    backgroundColor: '#f44336',
-    color: 'white',
-    padding: '10px 20px',
-    borderRadius: '4px',
-    zIndex: '2147483647',
-    boxShadow: '0 2px 10px rgba(0,0,0,0.2)',
-    fontFamily: 'Arial, sans-serif'
-  });
+  notification.className = '';
   notification.textContent = message || '保存失败，请重试';
   
   document.body.appendChild(notification);
@@ -598,57 +520,33 @@ function showNotePopup(note, event) {
   // 创建弹窗
   const popup = document.createElement('div');
   popup.className = 'web-notes-popup';
-  
-  // 设置样式
-  Object.assign(popup.style, {
-    position: 'absolute',
-    left: `${event.pageX}px`,
-    top: `${event.pageY + 20}px`,
-    backgroundColor: 'white',
-    border: '1px solid #ccc',
-    borderRadius: '4px',
-    padding: '10px',
-    boxShadow: '0 2px 10px rgba(0,0,0,0.2)',
-    zIndex: '2147483647',
-    maxWidth: '400px',
-    fontFamily: 'Arial, sans-serif',
-    fontSize: '14px'
-  });
-  
+  popup.style.position = 'absolute';
+  popup.style.left = `${event.pageX}px`;
+  popup.style.top = `${event.pageY + 20}px`;
+  popup.style.zIndex = '2147483647';
+
   // 创建内容
   let html = '';
-  
-  // 只显示高亮文本
   if (note.highlightedText) {
-    html += `<div style="color: #666; font-style: italic; margin-bottom: 8px; border-left: 3px solid #4CAF50; padding-left: 8px;">"${note.highlightedText}"</div>`;
+    html += `<div style=\"color: #666; font-style: italic; margin-bottom: 8px; border-left: 3px solid #f5e663; padding-left: 8px;\">\"${note.highlightedText}\"</div>`;
   }
-  
-  // 只有当用户笔记内容不为空时才显示
   if (note.note && note.note.trim() !== '') {
-    html += `<div style="margin-bottom: 8px;">${note.note}</div>`;
+    html += `<div style=\"margin-bottom: 8px;\">${note.note}</div>`;
   }
-  
   const date = new Date(note.timestamp);
-  html += `<div style="font-size: 12px; color: #999;">${date.toLocaleString()}</div>`;
-  
+  html += `<div class=\"note-meta\">${date.toLocaleString()}</div>`;
   popup.innerHTML = html;
-  
+
   // 添加关闭按钮
   const closeButton = document.createElement('button');
+  closeButton.className = '';
   closeButton.textContent = '×';
-  Object.assign(closeButton.style, {
-    position: 'absolute',
-    top: '5px',
-    right: '5px',
-    backgroundColor: 'transparent',
-    border: 'none',
-    fontSize: '16px',
-    cursor: 'pointer',
-    color: '#999'
-  });
+  closeButton.style.position = 'absolute';
+  closeButton.style.top = '5px';
+  closeButton.style.right = '5px';
   closeButton.onclick = () => popup.remove();
   popup.appendChild(closeButton);
-  
+
   // 添加关闭事件
   document.addEventListener('click', function closePopup(e) {
     if (!popup.contains(e.target)) {
@@ -656,7 +554,7 @@ function showNotePopup(note, event) {
       document.removeEventListener('click', closePopup);
     }
   });
-  
+
   // 添加到页面
   document.body.appendChild(popup);
 }

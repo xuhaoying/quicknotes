@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "Web Notes",
-  "version": "1.0",
-  "description": "A browser extension for taking notes and highlighting text on web pages",
+  "name": "QuickNote Web Clipper",
+  "version": "1.0.0",
+  "description": "Quickly clip and save notes from any web page with one click. 支持网页划词笔记与高亮。关键词: Web notes, Highlight to note, Save web highlights, Web annotation, Online note taker, Annotate web pages, Take notes on any website, Research notes, Read and annotate, Learn smarter, Productivity tools, Study helper, Content clipping, Mark and save ideas, Notion note, Alternative to Liner, Like Glasp.",
   "permissions": [
     "storage",
     "activeTab",
