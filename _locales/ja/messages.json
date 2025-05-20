@@ -1,0 +1,21 @@
+{
+  "extName": {"message": "QuickNote ウェブクリッパー"},
+  "extDesc": {"message": "ワンクリックでウェブページからメモをハイライト・保存。注釈・エクスポートも対応。"},
+  "saveNote": {"message": "メモを保存"},
+  "cancel": {"message": "キャンセル"},
+  "addNotePlaceholder": {"message": "メモを追加...（Enterで保存、Shift+Enterで改行）"},
+  "saving": {"message": "メモを保存中..."},
+  "saved": {"message": "メモを保存しました！"},
+  "saveFailed": {"message": "保存に失敗しました。もう一度お試しください。"},
+  "clearAll": {"message": "すべてのメモを削除"},
+  "exportNotes": {"message": "メモをエクスポート"},
+  "exportTitle": {"message": "エクスポート形式を選択"},
+  "exportAsJSON": {"message": "JSONでエクスポート"},
+  "exportAsText": {"message": "テキストでエクスポート"},
+  "exportAsMarkdown": {"message": "Markdownでエクスポート"},
+  "noNotesToExport": {"message": "エクスポートするメモがありません"},
+  "confirmClearAll": {"message": "すべてのメモを削除しますか？この操作は元に戻せません。"},
+  "noNotes": {"message": "メモはありません"},
+  "deleteNote": {"message": "このメモを削除"},
+  "confirmDeleteNote": {"message": "このメモを削除しますか？"}
+} 

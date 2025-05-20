@@ -1,0 +1,21 @@
+{
+  "extName": {"message": "QuickNote Веб-клиппер"},
+  "extDesc": {"message": "Быстро выделяйте и сохраняйте заметки с любой веб-страницы одним кликом. Поддержка аннотаций и экспорта."},
+  "saveNote": {"message": "Сохранить заметку"},
+  "cancel": {"message": "Отмена"},
+  "addNotePlaceholder": {"message": "Добавьте заметку... (Enter — сохранить, Shift+Enter — новая строка)"},
+  "saving": {"message": "Сохранение заметки..."},
+  "saved": {"message": "Заметка сохранена!"},
+  "saveFailed": {"message": "Не удалось сохранить, попробуйте еще раз."},
+  "clearAll": {"message": "Удалить все заметки"},
+  "exportNotes": {"message": "Экспорт заметок"},
+  "exportTitle": {"message": "Выберите формат экспорта"},
+  "exportAsJSON": {"message": "Экспорт в JSON"},
+  "exportAsText": {"message": "Экспорт в текст"},
+  "exportAsMarkdown": {"message": "Экспорт в Markdown"},
+  "noNotesToExport": {"message": "Нет заметок для экспорта"},
+  "confirmClearAll": {"message": "Вы уверены, что хотите удалить все заметки? Это действие нельзя отменить."},
+  "noNotes": {"message": "Нет заметок"},
+  "deleteNote": {"message": "Удалить эту заметку"},
+  "confirmDeleteNote": {"message": "Вы уверены, что хотите удалить эту заметку?"}
+} 

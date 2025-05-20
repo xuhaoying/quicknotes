@@ -8,13 +8,13 @@ document.addEventListener('DOMContentLoaded', function() {
   
   // 添加清空全部笔记按钮
   const clearButton = document.createElement('button');
-  clearButton.textContent = '清空全部笔记';
+  clearButton.textContent = chrome.i18n.getMessage('clearAll');
   clearButton.className = 'clear-all-btn';
   clearButton.onclick = confirmClearAllNotes;
   
   // 添加导出按钮
   const exportButton = document.createElement('button');
-  exportButton.textContent = '导出笔记';
+  exportButton.textContent = chrome.i18n.getMessage('exportNotes');
   exportButton.className = 'export-btn';
   exportButton.onclick = showExportOptions;
   
@@ -25,6 +25,7 @@ document.addEventListener('DOMContentLoaded', function() {
   // 添加到页面
   const container = document.querySelector('.container');
   const title = document.querySelector('h1');
+  title.textContent = chrome.i18n.getMessage('exportTitle');
   container.insertBefore(buttonContainer, title.nextSibling);
 });
 
@@ -35,7 +36,7 @@ function showExportOptions() {
     const notes = result.notes || [];
     
     if (notes.length === 0) {
-      alert('没有笔记可供导出');
+      alert(chrome.i18n.getMessage('noNotesToExport'));
       return;
     }
     
@@ -45,27 +46,27 @@ function showExportOptions() {
     
     // 创建标题
     const title = document.createElement('h3');
-    title.textContent = '选择导出格式';
+    title.textContent = chrome.i18n.getMessage('exportTitle');
     exportMenu.appendChild(title);
     
     // 创建导出选项按钮
     const jsonBtn = document.createElement('button');
-    jsonBtn.textContent = '导出为 JSON';
+    jsonBtn.textContent = chrome.i18n.getMessage('exportAsJSON');
     jsonBtn.className = 'export-option-btn';
     jsonBtn.onclick = () => exportNotes(notes, 'json');
     
     const textBtn = document.createElement('button');
-    textBtn.textContent = '导出为纯文本';
+    textBtn.textContent = chrome.i18n.getMessage('exportAsText');
     textBtn.className = 'export-option-btn';
     textBtn.onclick = () => exportNotes(notes, 'text');
     
     const markdownBtn = document.createElement('button');
-    markdownBtn.textContent = '导出为 Markdown';
+    markdownBtn.textContent = chrome.i18n.getMessage('exportAsMarkdown');
     markdownBtn.className = 'export-option-btn';
     markdownBtn.onclick = () => exportNotes(notes, 'markdown');
     
     const closeBtn = document.createElement('button');
-    closeBtn.textContent = '取消';
+    closeBtn.textContent = chrome.i18n.getMessage('cancel');
     closeBtn.className = 'export-cancel-btn';
     closeBtn.onclick = () => document.body.removeChild(exportMenu);
     
@@ -161,7 +162,7 @@ function exportNotes(notes, format) {
 
 // 确认是否清空所有笔记
 function confirmClearAllNotes() {
-  if (confirm('确定要清空所有笔记吗？这个操作不可撤销。')) {
+  if (confirm(chrome.i18n.getMessage('confirmClearAll'))) {
     chrome.storage.local.set({ notes: [] }, function() {
       loadNotes(); // 重新加载笔记列表（此时为空）
     });
@@ -176,7 +177,7 @@ function loadNotes() {
     notesList.innerHTML = '';
     
     if (notes.length === 0) {
-      notesList.innerHTML = '<p class="no-notes">暂无笔记</p>';
+      notesList.innerHTML = '<p class="no-notes">' + chrome.i18n.getMessage('noNotes') + '</p>';
       return;
     }
     
@@ -209,7 +210,7 @@ function createNoteElement(note, index) {
   
   // 添加删除按钮
   html += `<div class="note-actions">
-    <button class="delete-note-btn" title="删除此笔记">×</button>
+    <button class="delete-note-btn" title="${chrome.i18n.getMessage('deleteNote')}">×</button>
   </div>`;
   
   if (note.highlightedText) {
@@ -247,7 +248,7 @@ function deleteNote(index) {
   chrome.storage.local.get(['notes'], function(result) {
     const notes = result.notes || [];
     if (index >= 0 && index < notes.length) {
-      if (confirm('确定要删除这条笔记吗？')) {
+      if (confirm(chrome.i18n.getMessage('confirmDeleteNote'))) {
         notes.splice(index, 1);
         chrome.storage.local.set({ notes: notes }, function() {
           loadNotes(); // 重新加载笔记列表

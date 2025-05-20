@@ -93,7 +93,7 @@ function createNoteInput(x, y) {
   // 创建文本区域
   const textarea = document.createElement('textarea');
   textarea.className = '';
-  textarea.placeholder = '添加笔记... (按Enter保存，Shift+Enter换行)';
+  textarea.placeholder = chrome.i18n.getMessage('addNotePlaceholder');
   
   // 添加键盘事件监听，支持Enter保存和Shift+Enter换行
   textarea.addEventListener('keydown', function(e) {
@@ -118,13 +118,13 @@ function createNoteInput(x, y) {
   // 保存按钮
   const saveButton = document.createElement('button');
   saveButton.className = '';
-  saveButton.textContent = '保存笔记';
+  saveButton.textContent = chrome.i18n.getMessage('saveNote');
   saveButton.onclick = saveNote;
   
   // 取消按钮
   const cancelButton = document.createElement('button');
   cancelButton.className = '';
-  cancelButton.textContent = '取消';
+  cancelButton.textContent = chrome.i18n.getMessage('cancel');
   cancelButton.onclick = cancelNote;
   
   // 组装DOM
@@ -261,7 +261,7 @@ function directlySaveNote(note) {
     chrome.storage.local.get(['notes'], function(result) {
       if (chrome.runtime.lastError) {
         console.error('读取存储时出错:', chrome.runtime.lastError);
-        showErrorNotification('无法访问存储。请刷新页面后重试。');
+        showErrorNotification(chrome.i18n.getMessage('saveFailed'));
         return;
       }
       
@@ -271,7 +271,7 @@ function directlySaveNote(note) {
       chrome.storage.local.set({ notes: notes }, function() {
         if (chrome.runtime.lastError) {
           console.error('写入存储时出错:', chrome.runtime.lastError);
-          showErrorNotification('保存失败。请刷新页面后重试。');
+          showErrorNotification(chrome.i18n.getMessage('saveFailed'));
           return;
         }
         

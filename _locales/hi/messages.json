@@ -1,0 +1,21 @@
+{
+  "extName": {"message": "QuickNote वेब क्लिपर"},
+  "extDesc": {"message": "किसी भी वेब पेज से एक क्लिक में नोट्स हाइलाइट और सेव करें। एनोटेट और एक्सपोर्ट भी करें।"},
+  "saveNote": {"message": "नोट सेव करें"},
+  "cancel": {"message": "रद्द करें"},
+  "addNotePlaceholder": {"message": "नोट जोड़ें... (Enter से सेव, Shift+Enter से नई लाइन)"},
+  "saving": {"message": "नोट सेव हो रहा है..."},
+  "saved": {"message": "नोट सेव हो गया!"},
+  "saveFailed": {"message": "सेव करने में विफल, कृपया पुनः प्रयास करें।"},
+  "clearAll": {"message": "सभी नोट्स हटाएं"},
+  "exportNotes": {"message": "नोट्स एक्सपोर्ट करें"},
+  "exportTitle": {"message": "एक्सपोर्ट फॉर्मेट चुनें"},
+  "exportAsJSON": {"message": "JSON के रूप में एक्सपोर्ट करें"},
+  "exportAsText": {"message": "टेक्स्ट के रूप में एक्सपोर्ट करें"},
+  "exportAsMarkdown": {"message": "Markdown के रूप में एक्सपोर्ट करें"},
+  "noNotesToExport": {"message": "कोई नोट्स एक्सपोर्ट करने के लिए नहीं हैं"},
+  "confirmClearAll": {"message": "क्या आप वाकई सभी नोट्स हटाना चाहते हैं? यह क्रिया पूर्ववत नहीं की जा सकती।"},
+  "noNotes": {"message": "कोई नोट्स नहीं"},
+  "deleteNote": {"message": "यह नोट हटाएं"},
+  "confirmDeleteNote": {"message": "क्या आप वाकई यह नोट हटाना चाहते हैं?"}
+} 

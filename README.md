@@ -36,4 +36,16 @@
 - popup.html/js: 扩展弹出窗口
 - content.js: 注入到网页中的脚本
 - background.js: 后台脚本
-- styles.css: 样式文件 
+- styles.css: 样式文件
+
+## 多语言支持
+
+本插件支持多语言（自动适配浏览器语言）：
+- 中文
+- 英文
+- 日文
+- 韩文
+- 印度语
+- 俄语
+
+如需贡献翻译，请在 _locales 目录下添加对应语言的 messages.json 文件。 

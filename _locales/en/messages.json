@@ -1,0 +1,21 @@
+{
+  "extName": {"message": "QuickNote Web Clipper"},
+  "extDesc": {"message": "Quickly clip and save notes from any web page with one click. Highlight, annotate, and export your research."},
+  "saveNote": {"message": "Save Note"},
+  "cancel": {"message": "Cancel"},
+  "addNotePlaceholder": {"message": "Add a note... (Enter to save, Shift+Enter for new line)"},
+  "saving": {"message": "Saving note..."},
+  "saved": {"message": "Note saved!"},
+  "saveFailed": {"message": "Failed to save, please try again."},
+  "clearAll": {"message": "Clear All Notes"},
+  "exportNotes": {"message": "Export Notes"},
+  "exportTitle": {"message": "Choose export format"},
+  "exportAsJSON": {"message": "Export as JSON"},
+  "exportAsText": {"message": "Export as Text"},
+  "exportAsMarkdown": {"message": "Export as Markdown"},
+  "noNotesToExport": {"message": "No notes to export"},
+  "confirmClearAll": {"message": "Are you sure you want to clear all notes? This action cannot be undone."},
+  "noNotes": {"message": "No notes yet"},
+  "deleteNote": {"message": "Delete this note"},
+  "confirmDeleteNote": {"message": "Are you sure you want to delete this note?"}
+} 

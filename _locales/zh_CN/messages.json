@@ -1,0 +1,21 @@
+{
+  "extName": {"message": "QuickNote 网页笔记"},
+  "extDesc": {"message": "一键高亮、批注和保存网页笔记，支持导出，助力高效学习与研究。"},
+  "saveNote": {"message": "保存笔记"},
+  "cancel": {"message": "取消"},
+  "addNotePlaceholder": {"message": "添加笔记...（Enter保存，Shift+Enter换行）"},
+  "saving": {"message": "正在保存笔记..."},
+  "saved": {"message": "笔记保存成功！"},
+  "saveFailed": {"message": "保存失败，请重试。"},
+  "clearAll": {"message": "清空全部笔记"},
+  "exportNotes": {"message": "导出笔记"},
+  "exportTitle": {"message": "选择导出格式"},
+  "exportAsJSON": {"message": "导出为 JSON"},
+  "exportAsText": {"message": "导出为纯文本"},
+  "exportAsMarkdown": {"message": "导出为 Markdown"},
+  "noNotesToExport": {"message": "没有笔记可供导出"},
+  "confirmClearAll": {"message": "确定要清空所有笔记吗？这个操作不可撤销。"},
+  "noNotes": {"message": "暂无笔记"},
+  "deleteNote": {"message": "删除此笔记"},
+  "confirmDeleteNote": {"message": "确定要删除这条笔记吗？"}
+} 

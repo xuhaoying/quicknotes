@@ -1,0 +1,21 @@
+{
+  "extName": {"message": "QuickNote 웹 클리퍼"},
+  "extDesc": {"message": "한 번의 클릭으로 웹페이지에서 노트를 하이라이트하고 저장하세요. 주석 및 내보내기 지원."},
+  "saveNote": {"message": "노트 저장"},
+  "cancel": {"message": "취소"},
+  "addNotePlaceholder": {"message": "노트 추가... (Enter로 저장, Shift+Enter로 줄바꿈)"},
+  "saving": {"message": "노트 저장 중..."},
+  "saved": {"message": "노트가 저장되었습니다!"},
+  "saveFailed": {"message": "저장에 실패했습니다. 다시 시도해 주세요."},
+  "clearAll": {"message": "모든 노트 삭제"},
+  "exportNotes": {"message": "노트 내보내기"},
+  "exportTitle": {"message": "내보내기 형식 선택"},
+  "exportAsJSON": {"message": "JSON으로 내보내기"},
+  "exportAsText": {"message": "텍스트로 내보내기"},
+  "exportAsMarkdown": {"message": "Markdown으로 내보내기"},
+  "noNotesToExport": {"message": "내보낼 노트가 없습니다"},
+  "confirmClearAll": {"message": "모든 노트를 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다."},
+  "noNotes": {"message": "노트가 없습니다"},
+  "deleteNote": {"message": "이 노트 삭제"},
+  "confirmDeleteNote": {"message": "이 노트를 삭제하시겠습니까?"}
+} 
